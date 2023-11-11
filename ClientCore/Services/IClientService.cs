@@ -1,6 +1,6 @@
 ﻿namespace ClientCore.Services;
 
-internal interface IClientService
+public interface IClientService
 {
     /// <summary>
     /// Присоединиться к серверу
