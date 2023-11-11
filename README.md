@@ -8,3 +8,7 @@
 
 # Server
 Консольное сервер-приложение, Server.cs - реализация сервера. Program.cs - точка запуска консоли.
+
+# Ссылка на Figma
+https://www.figma.com/file/2f5T6GMPOyqLQFJQmOHLwm/Схема-чата-на-C%2B%2B?type=design&node-id=0-1&mode=design&t=c4wGh4cXRewWHBAF-0
+Там можно найти старое описание работы сервер-клиента на плюсах. А также наработки интерфейса.
