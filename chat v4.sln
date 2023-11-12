@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientApp", "ClientApp\Clie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientCore", "ClientCore\ClientCore.csproj", "{BFC048B8-2CCF-4D35-88F2-EBDF25EC4BCD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "..\..\..\Desktop\Server\Server.csproj", "{076F976D-39CA-4CC4-B3AC-094D949A3E76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerConsole", "..\..\..\Desktop\Server\ServerConsole.csproj", "{076F976D-39CA-4CC4-B3AC-094D949A3E76}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetArc", "..\..\..\Desktop\NetArc\NetArc.csproj", "{76369BD5-4839-4D5E-88F1-065155EE9E81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientConsole", "ClientConsole\ClientConsole.csproj", "{1889B2E3-117C-4252-B43A-2F765C556895}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{76369BD5-4839-4D5E-88F1-065155EE9E81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{76369BD5-4839-4D5E-88F1-065155EE9E81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{76369BD5-4839-4D5E-88F1-065155EE9E81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1889B2E3-117C-4252-B43A-2F765C556895}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1889B2E3-117C-4252-B43A-2F765C556895}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1889B2E3-117C-4252-B43A-2F765C556895}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1889B2E3-117C-4252-B43A-2F765C556895}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
