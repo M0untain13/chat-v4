@@ -35,7 +35,7 @@ public class Client
     /// <summary>
     /// Отправить сообщение на сервер
     /// </summary>
-    /// <param name="message"></param>
+    /// <param name="message"> Текст сообщения </param>
     public bool Send(string message)
     {
         throw new NotImplementedException();
