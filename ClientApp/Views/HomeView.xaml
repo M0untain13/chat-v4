@@ -9,7 +9,7 @@
     xmlns:local="clr-namespace:ClientApp.Views"
     xmlns:vm="clr-namespace:ClientCore.ViewModels;assembly=ClientCore"
 
-    d:DataContext="{d:DesignInstance vm:HomeViewModel}"
+    d:DataContext="{d:DesignInstance vm:StartViewModel}"
     d:DesignHeight="500" d:DesignWidth="600">
 
     <DockPanel>

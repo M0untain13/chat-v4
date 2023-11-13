@@ -3,7 +3,7 @@ using MvvmCross.ViewModels;
 
 namespace ClientCore.ViewModels
 {
-	public class HomeViewModel : MvxViewModel
+	public class StartViewModel : MvxViewModel
 	{
 		#region Сервисы
 
@@ -11,7 +11,7 @@ namespace ClientCore.ViewModels
 
 		#endregion
 
-		public HomeViewModel(IClientService clientService)
+		public StartViewModel(IClientService clientService)
 		{
             #region Инициализация сервисов
 

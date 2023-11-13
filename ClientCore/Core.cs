@@ -13,7 +13,7 @@ namespace ClientCore
                 .AsInterfaces()
                 .RegisterAsLazySingleton();
 
-            RegisterAppStart<HomeViewModel>();
+            RegisterAppStart<StartViewModel>();
         }
     }
 }

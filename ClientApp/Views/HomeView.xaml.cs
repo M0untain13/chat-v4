@@ -4,7 +4,7 @@ using MvvmCross.ViewModels;
 
 namespace ClientApp.Views
 {
-    [MvxViewFor(typeof(HomeViewModel))]
+    [MvxViewFor(typeof(StartViewModel))]
     public partial class HomeView : MvxWpfView
     {
         public HomeView() => InitializeComponent();
