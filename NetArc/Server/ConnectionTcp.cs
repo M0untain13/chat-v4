@@ -21,7 +21,7 @@ internal class ConnectionTcp
     /// <summary>
     /// Запустить прослушку входящих соединений с данного клиента
     /// </summary>
-    public void Start()
+    public bool Start()
     {
         throw new NotImplementedException();
     }
@@ -30,7 +30,7 @@ internal class ConnectionTcp
     /// Остановить работу с клиентом
     /// </summary>
     /// <exception cref="NotImplementedException"></exception>
-    public void Stop()
+    public bool Stop()
     {
         throw new NotImplementedException();
     }
@@ -39,7 +39,7 @@ internal class ConnectionTcp
     /// Отправить сообщение клиенту
     /// </summary>
     /// <param name="message"> Текст сообщения </param>
-    public void Send(string message)
+    public bool Send(string message)
     {
         throw new NotImplementedException();
     }

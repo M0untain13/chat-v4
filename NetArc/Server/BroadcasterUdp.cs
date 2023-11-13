@@ -20,7 +20,7 @@ internal class BroadcasterUdp
     /// Запустить вещания IP сервера с определённой периодичностью
     /// </summary>
     /// <exception cref="NotImplementedException"></exception>
-    public void Start()
+    public bool Start()
     {
         throw new NotImplementedException();
     }
@@ -29,7 +29,7 @@ internal class BroadcasterUdp
     /// Остановить вещания
     /// </summary>
     /// <exception cref="NotImplementedException"></exception>
-    public void Stop()
+    public bool Stop()
     {
         throw new NotImplementedException();
     }

@@ -18,7 +18,7 @@ internal class ListenerUdp
     /// <summary>
     /// Начать прослушку
     /// </summary>
-    public void Start()
+    public bool Start()
     {
         throw new NotImplementedException();
     }
@@ -26,7 +26,7 @@ internal class ListenerUdp
     /// <summary>
     /// Остановить прослушку
     /// </summary>
-    public void Stop()
+    public bool Stop()
     {
         throw new NotImplementedException();
     }

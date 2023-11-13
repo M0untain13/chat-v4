@@ -21,7 +21,7 @@ internal class ConnectorTcp
     /// <summary>
     /// Сделать попытку соединения с сервером, если получилось, то начать прослушку входящих сообщений с сервера
     /// </summary>
-    public void Start()
+    public bool Start()
     {
         throw new NotImplementedException();
     }
@@ -30,7 +30,7 @@ internal class ConnectorTcp
     /// Остановить попытку соединения или прослушку входящих соединений
     /// </summary>
     /// <exception cref="NotImplementedException"></exception>
-    public void Stop()
+    public bool Stop()
     {
         throw new NotImplementedException();
     }
@@ -39,7 +39,7 @@ internal class ConnectorTcp
     /// Отправить сообщение на сервер
     /// </summary>
     /// <param name="message"> Текст сообщения </param>
-    public void Send(string message)
+    public bool Send(string message)
     {
         throw new NotImplementedException();
     }

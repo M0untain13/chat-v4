@@ -19,7 +19,7 @@ public class Client
     /// <summary>
     /// Начать попытку соединения с сервером (Сначала слушать IP сервера с вещателя, а затем сделать попытку соединения с сервером по этому IP)
     /// </summary>
-    public void Start()
+    public bool Start()
     {
         throw new NotImplementedException();
     }
@@ -27,7 +27,7 @@ public class Client
     /// <summary>
     /// Остановить работу клиента
     /// </summary>
-    public void Stop()
+    public bool Stop()
     {
         throw new NotImplementedException();
     }
@@ -36,7 +36,7 @@ public class Client
     /// Отправить сообщение на сервер
     /// </summary>
     /// <param name="message"></param>
-    public void Send(string message)
+    public bool Send(string message)
     {
         throw new NotImplementedException();
     }

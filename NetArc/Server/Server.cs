@@ -20,7 +20,7 @@ public class Server
     /// <summary>
     /// Запустить сервер, запустить прослушку и вещатель
     /// </summary>
-    public void Start()
+    public bool Start()
     {
         throw new NotImplementedException();
     }
@@ -28,7 +28,7 @@ public class Server
     /// <summary>
     /// Остановить сервер, остановить прослушку и вещатель
     /// </summary>
-    public void Stop()
+    public bool Stop()
     {
         throw new NotImplementedException();
     }
@@ -37,7 +37,7 @@ public class Server
     /// Отправить сообщение через прослушку
     /// </summary>
     /// <param name="message"> Текст сообщения </param>
-    public void Send(string message)
+    public bool Send(string message)
     {
         throw new NotImplementedException();
     }

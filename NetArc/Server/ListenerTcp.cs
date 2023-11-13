@@ -18,7 +18,7 @@ internal class ListenerTcp
     /// <summary>
     /// Начать прослушку, для входящих соединений создать ConnectionTcp, запустить и добавить в массив соединений
     /// </summary>
-    public void Start()
+    public bool Start()
     {
         throw new NotImplementedException();
     }
@@ -26,7 +26,7 @@ internal class ListenerTcp
     /// <summary>
     /// Остановить прослушку, остановить соединения и отчистить массив
     /// </summary>
-    public void Stop()
+    public bool Stop()
     {
         throw new NotImplementedException();
     }
@@ -35,7 +35,7 @@ internal class ListenerTcp
     /// Отправить сообщения всем клиентам
     /// </summary>
     /// <param name="message"> Текст сообщения </param>
-    public void Send(string message)
+    public bool Send(string message)
     {
         throw new NotImplementedException();
     }
