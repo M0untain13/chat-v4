@@ -14,4 +14,8 @@
     <ProjectReference Include="..\NetArc\NetArc.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>
