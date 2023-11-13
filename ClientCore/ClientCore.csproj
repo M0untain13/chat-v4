@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Desktop\NetArc\NetArc.csproj" />
+    <ProjectReference Include="..\NetArc\NetArc.csproj" />
   </ItemGroup>
 
 </Project>
