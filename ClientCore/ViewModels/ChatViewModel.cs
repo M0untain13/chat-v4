@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ClientCore.Services;
+using MvvmCross.ViewModels;
 
 namespace ClientCore.ViewModels
 {
-    internal class ChatViewModel
+    public class ChatViewModel : MvxViewModel
     {
+        public ChatViewModel(IClientService clientService)
+        {
+            
+        }
     }
 }
