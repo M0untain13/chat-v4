@@ -11,7 +11,7 @@ public class Server
     /// <param name="callback"> Метод для обработки сообщений клиентов </param>
     /// <param name="listenPort"> Порт для прослушки соединений </param>
     /// <param name="broadcastPort"> Порт для вещания </param>
-    /// <param name="broadcastTimeout"> Периодичность отправления вещаний </param>
+    /// <param name="broadcastTimeout"> Периодичность отправления вещаний в мс </param>
     public Server(Action<string> callback, int listenPort, int broadcastPort, int broadcastTimeout)
     {
         throw new NotImplementedException();
