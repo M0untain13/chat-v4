@@ -1,4 +1,5 @@
-﻿using ClientCore.Services;
+﻿using ClientCore.Models;
+using ClientCore.Services;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
@@ -25,21 +26,24 @@ namespace ClientCore.ViewModels
             // TODO: переделать команды
 
             ConnectToServerCommand = new MvxCommand(
-                () => {
-                    clientService.Connect(_Callback);
+                () =>
+                {
+                    _client = clientService.GetClient(_Callback, 8000, 8001);
                 }
             );
 
             AuthCommand = new MvxCommand(
                 () =>
                 {
-                    clientService.Send("<|auth|>Dimon");
+                    _client.Send("<|auth|>Dimon");
                     navigationService.Navigate<ChatViewModel>();
                 }
             );
 
             #endregion
         }
+
+        private IClientWrapper _client = null!;
 
         private void _Callback(string message)
         {
