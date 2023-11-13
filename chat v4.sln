@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Консоли", "Конс�
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Библиотеки", "Библиотеки", "{A26C7DC5-E3FF-4BD3-97AA-43D6AD0BA1F6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Новая папка1", "Новая папка1", "{24924F6E-5FBF-4D63-BE8B-308C96F162CA}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Приложения", "Приложения", "{24924F6E-5FBF-4D63-BE8B-308C96F162CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +38,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{F649CE04-B05A-40F5-8E25-AFDB404846BA} = {24924F6E-5FBF-4D63-BE8B-308C96F162CA}
 		{BFC048B8-2CCF-4D35-88F2-EBDF25EC4BCD} = {A26C7DC5-E3FF-4BD3-97AA-43D6AD0BA1F6}
 		{1889B2E3-117C-4252-B43A-2F765C556895} = {75DB85F8-217E-47D8-953E-45D2F6AAB806}
 	EndGlobalSection
