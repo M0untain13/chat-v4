@@ -1,4 +1,5 @@
-﻿using ClientCore.Models;
+﻿using System.Collections.ObjectModel;
+using ClientCore.Models;
 using ClientCore.Services;
 using MvvmCross.ViewModels;
 using NetArc;
@@ -8,6 +9,13 @@ namespace ClientCore.ViewModels
 {
     public class ChatViewModel : MvxViewModel<IClientWrapper>
     {
+        private ObservableCollection<Message> _messages;
+        public ObservableCollection<Message> Messages
+        {
+            get => _messages;
+            set => SetProperty(ref _messages, value);
+        }
+
         public ChatViewModel()
         {
             
@@ -23,7 +31,7 @@ namespace ClientCore.ViewModels
 
         private void _Callback(string message)
         {
-            
+            if()
         }
     }
 }
