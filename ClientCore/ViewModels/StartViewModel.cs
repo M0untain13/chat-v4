@@ -76,7 +76,7 @@ namespace ClientCore.ViewModels
         {
             if (message.Contains(Tag.Wrap(Name)) && message.Contains(Tag.ACCEPT) && _isStart)
             {
-                _navigationService.Navigate<ChatViewModel, IClientWrapper>(_client);
+                _navigationService.Navigate<ChatViewModel, (IClientWrapper, string)>((_client, _name));
             }
         }
     }
