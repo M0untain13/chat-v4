@@ -15,9 +15,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Библиотеки", "Б�
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Приложения", "Приложения", "{24924F6E-5FBF-4D63-BE8B-308C96F162CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetArc", "NetArc\NetArc.csproj", "{1F3C2CDB-7824-47F2-ADFE-D4B731055F15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetArc", "NetArc\NetArc.csproj", "{1F3C2CDB-7824-47F2-ADFE-D4B731055F15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerConsole", "ServerConsole\ServerConsole.csproj", "{AECBE0DE-0952-4C73-8C51-1FEC28BBFC63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerConsole", "ServerConsole\ServerConsole.csproj", "{AECBE0DE-0952-4C73-8C51-1FEC28BBFC63}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Тесты", "Тесты", "{FA7121D2-0DFD-4885-AADC-9D7AC1E270C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestForNetArc", "TestForNetArc\TestForNetArc.csproj", "{A8B0259F-5A38-4234-B05B-E2840F5FCB40}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,10 @@ Global
 		{AECBE0DE-0952-4C73-8C51-1FEC28BBFC63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AECBE0DE-0952-4C73-8C51-1FEC28BBFC63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AECBE0DE-0952-4C73-8C51-1FEC28BBFC63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8B0259F-5A38-4234-B05B-E2840F5FCB40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8B0259F-5A38-4234-B05B-E2840F5FCB40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8B0259F-5A38-4234-B05B-E2840F5FCB40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8B0259F-5A38-4234-B05B-E2840F5FCB40}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +63,7 @@ Global
 		{1889B2E3-117C-4252-B43A-2F765C556895} = {75DB85F8-217E-47D8-953E-45D2F6AAB806}
 		{1F3C2CDB-7824-47F2-ADFE-D4B731055F15} = {A26C7DC5-E3FF-4BD3-97AA-43D6AD0BA1F6}
 		{AECBE0DE-0952-4C73-8C51-1FEC28BBFC63} = {75DB85F8-217E-47D8-953E-45D2F6AAB806}
+		{A8B0259F-5A38-4234-B05B-E2840F5FCB40} = {FA7121D2-0DFD-4885-AADC-9D7AC1E270C7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DFD4ED84-0839-47BC-9922-7EC9E67D7803}
