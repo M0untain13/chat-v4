@@ -5,8 +5,11 @@
 /// </summary>
 public static class Code
 {
-    /// <summary>
-    /// Тег сообщений вещателя сервера
-    /// </summary>
-    public const string BROADCAST = "<|broadcast|>";
+    public static string Wrap(string text) => $"<|{text}|>";
+
+    public const string 
+        BROADCAST = "<|broadcast|>",
+        AUTH = "<|auth|>",
+        ACCEPT = "<|accept|>",
+        DENIED = "<|denied|>";
 }
