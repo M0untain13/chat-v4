@@ -16,6 +16,7 @@ namespace ClientCore.ViewModels
         public override void Prepare(IClientWrapper client)
         {
             _client = client;
+            _client.SetCallback(_Callback);
         }
 
         private IClientWrapper? _client;

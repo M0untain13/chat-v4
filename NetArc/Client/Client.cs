@@ -40,4 +40,14 @@ public class Client
     {
         throw new NotImplementedException();
     }
+
+    /// <summary>
+    /// Установить новый обработчик сообщений сервера. По сути callback нужно засунуть в ConnectorTcp
+    /// </summary>
+    /// <param name="callback"> Метод для обработки сообщений сервера </param>
+    /// <returns> Удалось ли установить обработчик </returns>
+    public bool SetCallback(Action<string> callback)
+    {
+        throw new NotImplementedException();
+    }
 }

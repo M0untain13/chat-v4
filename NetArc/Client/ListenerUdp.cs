@@ -8,15 +8,14 @@ internal class ListenerUdp
     /// <summary>
     /// Создать слушатель
     /// </summary>
-    /// <param name="callback"> Метод для обработки сообщений сервера </param>
     /// <param name="port"> Порт для прослушки вещаний </param>
-    public ListenerUdp(Action<string> callback, int port)
+    public ListenerUdp(int port)
     {
         throw new NotImplementedException();
     }
 
     /// <summary>
-    /// Начать прослушку
+    /// Начать прослушку. True должен вернуть в том случае, когда удалось получить IP сервера.
     /// </summary>
     public bool Start()
     {
@@ -27,6 +26,15 @@ internal class ListenerUdp
     /// Остановить прослушку
     /// </summary>
     public bool Stop()
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Получить IP сервера, но только после завершения метода Start()
+    /// </summary>
+    /// <returns> IP сервера в виде текста </returns>
+    public string GetServerIp()
     {
         throw new NotImplementedException();
     }

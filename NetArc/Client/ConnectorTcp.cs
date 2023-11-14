@@ -43,4 +43,14 @@ internal class ConnectorTcp
     {
         throw new NotImplementedException();
     }
+
+    /// <summary>
+    /// Установить новый обработчик сообщений сервера
+    /// </summary>
+    /// <param name="callback"> Метод для обработки сообщений сервера </param>
+    /// <returns> Удалось ли установить обработчик </returns>
+    public bool SetCallback(Action<string> callback)
+    {
+        throw new NotImplementedException();
+    }
 }

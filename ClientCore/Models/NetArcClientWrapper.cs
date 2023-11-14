@@ -15,5 +15,7 @@ public class NetArcClientWrapper : IClientWrapper
 
     public bool Send(string message) => _client.Send(message);
 
+    public bool SetCallback(Action<string> callback) => _client.SetCallback(callback);
+
     private readonly Client _client;
 }

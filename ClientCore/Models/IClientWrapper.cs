@@ -9,4 +9,6 @@ public interface IClientWrapper
     bool Stop();
 
     bool Send(string message);
+
+    bool SetCallback(Action<string> callback);
 }
