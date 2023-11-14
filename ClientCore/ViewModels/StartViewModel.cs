@@ -11,6 +11,7 @@ namespace ClientCore.ViewModels
     {
         #region Сервисы
 
+        private readonly IClientService _clientService;
         private readonly IMvxNavigationService _navigationService;
 
         #endregion
@@ -28,10 +29,6 @@ namespace ClientCore.ViewModels
 
         #region Команды
 
-        public IMvxCommand ConnectToServerCommand { get; }
-
-        public IMvxCommand DisconnectToServerCommand { get; }
-
         public IMvxCommand AuthCommand { get; }
 
         #endregion
@@ -43,36 +40,12 @@ namespace ClientCore.ViewModels
         {
             #region Инициализация сервисов
 
+            _clientService = clientService;
             _navigationService = navigationService;
 
             #endregion
 
             #region Инициализация команд
-
-            // TODO: переделать команды
-
-            ConnectToServerCommand = new MvxCommand(
-                () =>
-                {
-                    _client = clientService.GetClient(_Callback, 8000, 8001);
-                    var isStart = _client.Start();
-                    if (!isStart)
-                        _client = null;
-                },
-                () => _client == null
-            );
-
-            DisconnectToServerCommand = new MvxCommand(
-                () =>
-                {
-                    if (_client == null)
-                        return;
-
-                    _client.Stop();
-                    _client = null;
-                },
-                () => _client != null
-            );
 
             AuthCommand = new MvxCommand(
                 () =>
@@ -80,19 +53,31 @@ namespace ClientCore.ViewModels
                     if (_client == null)
                         return;
 
-                    _client.Send($"{Code.AUTH}{Name}");
+                    _client.Send($"{Tag.AUTH}{Name}");
                 },
-                () => _client != null
+                () => _isStart
             );
 
             #endregion
         }
 
+        public override async Task Initialize()
+        {
+            await base.Initialize();
+
+            do
+            {
+                _client = _clientService.GetClient(_Callback, 8000, 8001);
+                _isStart = _client.Start();
+            } while (!_isStart);
+        }
+
         private IClientWrapper? _client;
+        private bool _isStart;
 
         private void _Callback(string message)
         {
-            if (message.Contains(Code.Wrap(Name)) && message.Contains(Code.ACCEPT) && _client != null)
+            if (message.Contains(Tag.Wrap(Name)) && message.Contains(Tag.ACCEPT) && _client != null)
             {
                 _navigationService.Navigate<ChatViewModel, IClientWrapper>(_client);
             }
