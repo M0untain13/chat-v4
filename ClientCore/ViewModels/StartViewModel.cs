@@ -50,12 +50,9 @@ namespace ClientCore.ViewModels
             AuthCommand = new MvxCommand(
                 () =>
                 {
-                    if (_client == null)
-                        return;
-
                     _client.Send($"{Tag.AUTH}{Name}");
                 },
-                () => _isStart
+                () => _isStart && Name != ""
             );
 
             #endregion
@@ -72,12 +69,12 @@ namespace ClientCore.ViewModels
             } while (!_isStart);
         }
 
-        private IClientWrapper? _client;
+        private IClientWrapper _client = null!;
         private bool _isStart;
 
         private void _Callback(string message)
         {
-            if (message.Contains(Tag.Wrap(Name)) && message.Contains(Tag.ACCEPT) && _client != null)
+            if (message.Contains(Tag.Wrap(Name)) && message.Contains(Tag.ACCEPT) && _isStart)
             {
                 _navigationService.Navigate<ChatViewModel, IClientWrapper>(_client);
             }
