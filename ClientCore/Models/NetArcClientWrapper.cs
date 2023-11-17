@@ -19,3 +19,16 @@ public class NetArcClientWrapper : IClientWrapper
 
     private readonly Client _client;
 }
+
+public class TempClientWrapper : IClientWrapper
+{
+    public TempClientWrapper(Action<string> callback, int connectPort, int listenPort) { }
+
+    public bool Start() => true;
+
+    public bool Stop() => true;
+
+    public bool Send(string message) => true;
+
+    public bool SetCallback(Action<string> callback) => true;
+}

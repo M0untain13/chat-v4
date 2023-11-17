@@ -8,6 +8,7 @@ internal class ClientService : IClientService
 {
     public IClientWrapper GetClient(Action<string> callback, int connectPort, int listenPort)
     {
-        return new NetArcClientWrapper(callback, connectPort, listenPort);
+        // TODO: вернуть return new NetArcClientWrapper(callback, connectPort, listenPort);
+        return new TempClientWrapper(callback, connectPort, listenPort);
     }
 }

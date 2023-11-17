@@ -27,6 +27,17 @@ namespace ClientCore.ViewModels
 
         #endregion
 
+        #region Поле заргрузки
+
+        private string _loadMessage = "Подождите, идёт подключение к серверу...";
+        public string LoadMessage
+        {
+            get => _loadMessage;
+            set => SetProperty(ref _loadMessage, value);
+        }
+
+        #endregion
+
         #region Команды
 
         public IMvxCommand AuthCommand { get; }
@@ -50,23 +61,34 @@ namespace ClientCore.ViewModels
             AuthCommand = new MvxCommand(
                 () =>
                 {
-                    _client.Send($"{Tag.AUTH}{Name}");
-                },
-                () => _isStart && Name != ""
+                    if (!_isStart || _name == "")
+                        return;
+
+                    // TODO: вернуть _client.Send($"{Tag.AUTH}{Name}");
+                    // TODO: убрать строку внизу
+                    _Callback($"{Tag.ACCEPT}{Tag.Wrap(_name)}");
+                }
             );
 
             #endregion
-        }
 
-        public override async Task Initialize()
-        {
-            await base.Initialize();
+            #region Подключение к серверу
 
-            do
+            Task.Run(() =>
             {
-                _client = _clientService.GetClient(_Callback, 8000, 8001);
-                _isStart = _client.Start();
-            } while (!_isStart);
+                //TODO: убрать эту строку
+                Thread.Sleep(1000);
+
+                do
+                {
+                    _client = _clientService.GetClient(_Callback, 8000, 8001);
+                    _isStart = _client.Start();
+                } while (!_isStart);
+
+                LoadMessage = "Клиент подключился к серверу!";
+            });
+
+            #endregion
         }
 
         private IClientWrapper _client = null!;

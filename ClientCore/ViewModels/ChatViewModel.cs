@@ -13,8 +13,8 @@ namespace ClientCore.ViewModels
     {
         #region Коллекция пришедших сообщений
 
-        private ObservableCollection<(string, string)> _messages = new();
-        public ObservableCollection<(string, string)> Messages
+        private ObservableCollection<Messages> _messages = new();
+        public ObservableCollection<Messages> Messages
         {
             get => _messages;
             set => SetProperty(ref _messages, value);
@@ -44,11 +44,17 @@ namespace ClientCore.ViewModels
             #region Инициализация команд
 
             SendCommand = new MvxCommand(
-                () => {
+                () =>
+                {
+                    if (_text.Length == 0)
+                        return;
+
                     _client.Send($"{Tag.MESSAGE}{Tag.Wrap(_name, Tag.NAME_S, Tag.NAME_E)}{Tag.Wrap(_text, Tag.TEXT_S, Tag.TEXT_E)}");
-                },
-                () => _text.Length != 0
+                }
             );
+
+            _messages.Add(new Messages { Name = "Валера", Text = "Го бухать" });
+            _messages.Add(new Messages { Name = "Димон", Text = "Го)))" });
 
             #endregion
         }
@@ -76,7 +82,7 @@ namespace ClientCore.ViewModels
                 if (name == _name)
                     name = "Вы";
 
-                _messages.Add((name, text));
+                _messages.Add(new Messages{Name=name, Text=text});
             }
         }
     }
