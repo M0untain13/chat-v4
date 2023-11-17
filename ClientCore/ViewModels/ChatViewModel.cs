@@ -1,11 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using ClientCore.Models;
-using ClientCore.Services;
+using ClientCore.Services; 
 using MvvmCross.ViewModels;
 using NetArc;
-using System.Xml.Linq;
 using MvvmCross.Commands;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ClientCore.ViewModels
 {
@@ -13,8 +11,8 @@ namespace ClientCore.ViewModels
     {
         #region Коллекция пришедших сообщений
 
-        private ObservableCollection<Messages> _messages = new();
-        public ObservableCollection<Messages> Messages
+        private ObservableCollection<Message> _messages = new();
+        public ObservableCollection<Message> Messages
         {
             get => _messages;
             set => SetProperty(ref _messages, value);
@@ -33,6 +31,26 @@ namespace ClientCore.ViewModels
 
         #endregion
 
+        #region Сообщение статус-бара
+
+        private ushort _timer = 0;
+
+        private string _statusMessage = string.Empty;
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            set
+            {
+                if (SetProperty(ref _statusMessage, value))
+                {
+                    // Установка таймера для сброса сообщения в статус-баре
+                    _timer = 3;
+                }
+            }
+        }
+
+        #endregion
+
         #region Команды
 
         public IMvxCommand SendCommand { get; }
@@ -46,15 +64,45 @@ namespace ClientCore.ViewModels
             SendCommand = new MvxCommand(
                 () =>
                 {
-                    if (_text.Length == 0)
+                    if (Text.Length == 0)
                         return;
 
-                    _client.Send($"{Tag.MESSAGE}{Tag.Wrap(_name, Tag.NAME_S, Tag.NAME_E)}{Tag.Wrap(_text, Tag.TEXT_S, Tag.TEXT_E)}");
+                    StatusMessage = "Отправка сообщения...";
+
+                    /* TODO: вернуть
+                    StatusMessage = _client.Send(
+                        $"{Tag.MESSAGE}{Tag.Wrap(_name, Tag.NAME_S, Tag.NAME_E)}{Tag.Wrap(Text, Tag.TEXT_S, Tag.TEXT_E)}") 
+                        ? "Сообщение отправлено." 
+                        : "Ошибка: Сообщение не отправилось.";
+                    */
+
+                    // TODO: убрать
+                    
                 }
             );
 
-            _messages.Add(new Messages { Name = "Валера", Text = "Го бухать" });
-            _messages.Add(new Messages { Name = "Димон", Text = "Го)))" });
+            #endregion
+
+            #region Временная заглушка
+
+            Messages.Add(new Message { Name = "Валера", Text = "Го бухать" });
+            Messages.Add(new Message { Name = "Димон", Text = "Го)))" });
+
+            #endregion
+
+            #region Таймер для сброса статус-бара
+
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    Thread.Sleep(1000);
+                    if (_timer > 0)
+                        _timer--;
+                    if (_timer == 0)
+                        StatusMessage = "";
+                }
+            });
 
             #endregion
         }
@@ -82,7 +130,7 @@ namespace ClientCore.ViewModels
                 if (name == _name)
                     name = "Вы";
 
-                _messages.Add(new Messages{Name=name, Text=text});
+                Messages.Add(new Message{Name=name, Text=text});
             }
         }
     }

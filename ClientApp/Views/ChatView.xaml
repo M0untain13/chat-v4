@@ -18,6 +18,11 @@
                 <TextBlock Text="Бог поможет..."/>
             </MenuItem>
         </Menu>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock Text="{Binding Path=StatusMessage}"/>
+            </StatusBarItem>
+        </StatusBar>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
