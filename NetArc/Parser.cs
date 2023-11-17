@@ -77,7 +77,7 @@ public class Parser
 		return new Message(sender, type, name, text);
 	}
 
-	public static string _ParseTag(string message, string tagS, string tagE)
+	private static string _ParseTag(string message, string tagS, string tagE)
 	{
 		var start = message.IndexOf(tagS, StringComparison.Ordinal) + tagS.Length;
 		var end = message.IndexOf(tagE, StringComparison.Ordinal) - start;
