@@ -4,6 +4,8 @@ using ClientCore.Services;
 using MvvmCross.ViewModels;
 using NetArc;
 using MvvmCross.Commands;
+using static System.Net.Mime.MediaTypeNames;
+using System.Xml.Linq;
 
 namespace ClientCore.ViewModels
 {
@@ -53,7 +55,7 @@ namespace ClientCore.ViewModels
 
         #region Команды
 
-        public IMvxCommand SendCommand { get; }
+        public IMvxAsyncCommand SendCommand { get; }
 
         #endregion
 
@@ -61,23 +63,36 @@ namespace ClientCore.ViewModels
         {
             #region Инициализация команд
 
-            SendCommand = new MvxCommand(
+            SendCommand = new MvxAsyncCommand(
                 () =>
                 {
                     if (Text.Length == 0)
-                        return;
+                        return Task.Run(() =>
+                        {
+                            StatusMessage = "Сообщение не было отправлено!";
+                        });
 
-                    StatusMessage = "Отправка сообщения...";
+                    return Task.Run(() =>
+                    {
+                        StatusMessage = "Отправка сообщения...";
 
-                    /* TODO: вернуть
-                    StatusMessage = _client.Send(
-                        $"{Tag.MESSAGE}{Tag.Wrap(_name, Tag.NAME_S, Tag.NAME_E)}{Tag.Wrap(Text, Tag.TEXT_S, Tag.TEXT_E)}") 
-                        ? "Сообщение отправлено." 
-                        : "Ошибка: Сообщение не отправилось.";
-                    */
+                        /* TODO: вернуть
+                        StatusMessage = _client.Send(
+                            $"{Tag.MESSAGE}{Tag.Wrap(_name, Tag.NAME_S, Tag.NAME_E)}{Tag.Wrap(Text, Tag.TEXT_S, Tag.TEXT_E)}")
+                            ? "Сообщение отправлено."
+                            : "Ошибка: Сообщение не отправилось.";
+                        */
 
-                    // TODO: убрать
-                    
+                        // TODO: убрать
+                        Thread.Sleep(1000);
+                        AsyncDispatcher.ExecuteOnMainThreadAsync(() =>
+                        {
+                            _Callback($"{Tag.MESSAGE}{Tag.Wrap(_name, Tag.NAME_S, Tag.NAME_E)}{Tag.Wrap(Text, Tag.TEXT_S, Tag.TEXT_E)}");
+                            Text = "";
+                            //Messages.Add(new Message { Name = _name, Text = Text });
+                            StatusMessage = "Сообщение отправлено.";
+                        });
+                    });
                 }
             );
 

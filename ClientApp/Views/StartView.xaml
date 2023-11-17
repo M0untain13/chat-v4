@@ -13,6 +13,9 @@
     d:DesignHeight="500" d:DesignWidth="600">
 
     <DockPanel>
+        <DockPanel.InputBindings>
+            <KeyBinding Key="Enter" Command="{Binding AuthCommand}"/>
+        </DockPanel.InputBindings>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Помощь">
                 <TextBlock Text="Бог поможет..."/>
@@ -44,7 +47,9 @@
                      FontSize="20" FontFamily="Arial"
                      Width="150" Height="70"
                      TextAlignment="Center" VerticalContentAlignment="Center"/>
-            <Button Grid.Column="1" Grid.Row="3" Command="{Binding AuthCommand}"/>
+            <Button Content="Отправить" 
+                    Grid.Column="1" Grid.Row="3" 
+                    Command="{Binding AuthCommand}"/>
         </Grid>
     </DockPanel>
 

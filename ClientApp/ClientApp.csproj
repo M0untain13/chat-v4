@@ -16,4 +16,8 @@
     <ProjectReference Include="..\ClientCore\ClientCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrastructure\" />
+  </ItemGroup>
+
 </Project>
