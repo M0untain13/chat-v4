@@ -12,7 +12,7 @@ public class Server
     /// <param name="listenPort"> Порт для прослушки соединений </param>
     /// <param name="broadcastPort"> Порт для вещания </param>
     /// <param name="broadcastTimeout"> Периодичность отправления вещаний в мс </param>
-    public Server(Action<string> callback, int listenPort, int broadcastPort, int broadcastTimeout)
+    public Server(Action<WebMessage> callback, int listenPort, int broadcastPort, int broadcastTimeout)
     {
         throw new NotImplementedException();
     }
@@ -37,7 +37,7 @@ public class Server
     /// Отправить сообщение через прослушку
     /// </summary>
     /// <param name="message"> Текст сообщения </param>
-    public bool Send(string message)
+    public bool Send(WebMessage message)
     {
         throw new NotImplementedException();
     }

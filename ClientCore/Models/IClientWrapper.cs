@@ -1,4 +1,5 @@
-﻿using NetArc.Client;
+﻿using NetArc;
+using NetArc.Client;
 
 namespace ClientCore.Models;
 
@@ -8,7 +9,7 @@ public interface IClientWrapper
 
     bool Stop();
 
-    bool Send(string message);
+    bool Send(WebMessage message);
 
-    bool SetCallback(Action<string> callback);
+    bool SetCallback(Action<WebMessage> callback);
 }

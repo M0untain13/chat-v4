@@ -87,7 +87,7 @@ namespace ClientCore.ViewModels
                         Thread.Sleep(1000);
                         AsyncDispatcher.ExecuteOnMainThreadAsync(() =>
                         {
-                            _Callback($"{Tag.MESSAGE}{Tag.Wrap(_name, Tag.NAME_S, Tag.NAME_E)}{Tag.Wrap(Text, Tag.TEXT_S, Tag.TEXT_E)}");
+                            _Callback(new WebMessage("client", "message", _name, Text));
                             Text = "";
                             //Messages.Add(new Message { Name = _name, Text = Text });
                             StatusMessage = "Сообщение отправлено.";
@@ -100,8 +100,8 @@ namespace ClientCore.ViewModels
 
             #region Временная заглушка
 
-            Messages.Add(new Message { Name = "Валера", Text = "Го бухать" });
-            Messages.Add(new Message { Name = "Димон", Text = "Го)))" });
+            Messages.Add(new Message("Валера", "Го бухать"));
+            Messages.Add(new Message("Димон", "Го)))"));
 
             #endregion
 
@@ -132,20 +132,16 @@ namespace ClientCore.ViewModels
         private IClientWrapper _client = null!;
         private string _name = string.Empty;
 
-        private void _Callback(string message)
+        private void _Callback(WebMessage webMessage)
         {
-            if (message.Contains(Tag.MESSAGE))
+            if (webMessage.type == "message")
             {
-                message = message.Replace(Tag.MESSAGE, "");
+                var message = new Message(webMessage.name, webMessage.text);
 
-                
-                var name = Tag.ParseWrap(message, Tag.NAME_S, Tag.NAME_E);
-                var text = Tag.ParseWrap(message, Tag.TEXT_S, Tag.TEXT_E);
+                if (message.Name == _name)
+                    message.Name = "Вы";
 
-                if (name == _name)
-                    name = "Вы";
-
-                Messages.Add(new Message{Name=name, Text=text});
+                Messages.Add(message);
             }
         }
     }

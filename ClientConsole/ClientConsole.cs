@@ -1,4 +1,5 @@
-﻿using NetArc.Client;
+﻿using NetArc;
+using NetArc.Client;
 
 namespace ClientConsole
 {
@@ -11,7 +12,7 @@ namespace ClientConsole
         }
 
         // TODO: Метод для получения сообщений с сервера
-        private static void Callback(string message)
+        private static void Callback(WebMessage message)
         {
             Console.WriteLine(message);
         }

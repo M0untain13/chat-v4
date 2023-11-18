@@ -66,7 +66,7 @@ namespace ClientCore.ViewModels
 
                     // TODO: вернуть _client.Send($"{Tag.AUTH}{Name}");
                     // TODO: убрать строку внизу
-                    _Callback($"{Tag.ACCEPT}{Tag.Wrap(_name)}");
+                    _Callback(new WebMessage("server", "auth", Name, "accept"));
                 }
             );
 
@@ -94,11 +94,11 @@ namespace ClientCore.ViewModels
         private IClientWrapper _client = null!;
         private bool _isStart;
 
-        private void _Callback(string message)
+        private void _Callback(WebMessage message)
         {
-            if (message.Contains(Tag.Wrap(Name)) && message.Contains(Tag.ACCEPT) && _isStart)
+            if (message is { sender: "server", type: "auth", text: "accept" })
             {
-                _navigationService.Navigate<ChatViewModel, (IClientWrapper, string)>((_client, _name));
+                _navigationService.Navigate<ChatViewModel, (IClientWrapper, string)>((_client, Name));
             }
         }
     }

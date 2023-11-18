@@ -1,8 +1,9 @@
 ﻿using ClientCore.Models;
+using NetArc;
 
 namespace ClientCore.Services;
 
 public interface IClientService
 {
-    IClientWrapper GetClient(Action<string> callback, int connectPort, int listenPort);
+    IClientWrapper GetClient(Action<WebMessage> callback, int connectPort, int listenPort);
 }

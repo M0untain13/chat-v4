@@ -11,7 +11,7 @@ public class Client
     /// <param name="callback"> Метод для обработки сообщений сервера </param>
     /// <param name="connectPort"> Порт для соединения к серверу </param>
     /// <param name="listenPort"> Порт прослушки вещаний </param>
-    public Client(Action<string> callback, int connectPort, int listenPort)
+    public Client(Action<WebMessage> callback, int connectPort, int listenPort)
     {
         throw new NotImplementedException();
     }
@@ -36,7 +36,7 @@ public class Client
     /// Отправить сообщение на сервер
     /// </summary>
     /// <param name="message"> Текст сообщения </param>
-    public bool Send(string message)
+    public bool Send(WebMessage message)
     {
         throw new NotImplementedException();
     }
@@ -46,7 +46,7 @@ public class Client
     /// </summary>
     /// <param name="callback"> Метод для обработки сообщений сервера </param>
     /// <returns> Удалось ли установить обработчик </returns>
-    public bool SetCallback(Action<string> callback)
+    public bool SetCallback(Action<WebMessage> callback)
     {
         throw new NotImplementedException();
     }

@@ -1,4 +1,5 @@
 ﻿using ClientCore.Models;
+using NetArc;
 
 namespace ClientCore.Services;
 
@@ -6,7 +7,7 @@ namespace ClientCore.Services;
 
 internal class ClientService : IClientService
 {
-    public IClientWrapper GetClient(Action<string> callback, int connectPort, int listenPort)
+    public IClientWrapper GetClient(Action<WebMessage> callback, int connectPort, int listenPort)
     {
         // TODO: вернуть return new NetArcClientWrapper(callback, connectPort, listenPort);
         return new TempClientWrapper(callback, connectPort, listenPort);
