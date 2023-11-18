@@ -38,9 +38,29 @@ namespace ClientCore.ViewModels
 
         #endregion
 
+        #region Сообщение статус-бара
+
+        private ushort _timer = 0;
+
+        private string _statusMessage = string.Empty;
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            set
+            {
+                if (SetProperty(ref _statusMessage, value))
+                {
+                    // Установка таймера для сброса сообщения в статус-баре
+                    _timer = 3;
+                }
+            }
+        }
+
+        #endregion
+
         #region Команды
 
-        public IMvxCommand AuthCommand { get; }
+        public IMvxAsyncCommand AuthCommand { get; }
 
         #endregion
 
@@ -58,15 +78,21 @@ namespace ClientCore.ViewModels
 
             #region Инициализация команд
 
-            AuthCommand = new MvxCommand(
+            AuthCommand = new MvxAsyncCommand(
                 () =>
                 {
                     if (!_isStart || _name == "")
-                        return;
+                        return Task.Run(() =>
+                        {
+                            StatusMessage = "Не удалось отправить сообщение серверу.";
+                        });
 
                     // TODO: вернуть _client.Send($"{Tag.AUTH}{Name}");
                     // TODO: убрать строку внизу
-                    _Callback(new WebMessage("server", "auth", Name, "accept"));
+                    return Task.Run(() =>
+                    {
+                        _Callback(new WebMessage("server", "auth", Name, "accept"));
+                    });
                 }
             );
 
@@ -77,7 +103,8 @@ namespace ClientCore.ViewModels
             Task.Run(() =>
             {
                 //TODO: убрать эту строку
-                Thread.Sleep(1000);
+                StatusMessage = "Подключение к серверу...";
+                Thread.Sleep(3000);
 
                 do
                 {
@@ -85,7 +112,23 @@ namespace ClientCore.ViewModels
                     _isStart = _client.Start();
                 } while (!_isStart);
 
-                LoadMessage = "Клиент подключился к серверу!";
+                StatusMessage = "Клиент подключился к серверу!";
+            });
+
+            #endregion
+
+            #region Таймер для сброса статус-бара
+
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    Thread.Sleep(1000);
+                    if (_timer > 0)
+                        _timer--;
+                    if (_timer == 0)
+                        StatusMessage = "";
+                }
             });
 
             #endregion
@@ -98,6 +141,8 @@ namespace ClientCore.ViewModels
         {
             if (message is { sender: "server", type: "auth", text: "accept" })
             {
+                StatusMessage = "Авторизация успешна!";
+                Thread.Sleep(1000);
                 _navigationService.Navigate<ChatViewModel, (IClientWrapper, string)>((_client, Name));
             }
         }
