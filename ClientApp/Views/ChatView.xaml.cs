@@ -11,5 +11,7 @@ namespace ClientApp.Views
     public partial class ChatView : MvxWpfView
     {
         public ChatView() => InitializeComponent();
+
+        private void HelpButtonClick(object sender, RoutedEventArgs e) => MessageBox.Show("Бог поможет...", "No way!");
     }
 }

@@ -8,7 +8,58 @@
     StartupUri="/Views/MainWindow.xaml">
 
     <Application.Resources>
-        <!-- Вроде как ресурсы нам понадобиться не должны -->
+        
+        <Brush x:Key="back">
+            #FF1C2027
+        </Brush>
+        <Brush x:Key="back1">
+            #FF111419
+        </Brush>
+        <Brush x:Key="text">
+            white
+        </Brush>
+
+        <Style TargetType="Button" x:Key="BaseButtonStyle">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource text}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FF241124"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+
+        <Style TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+            <Setter Property="Command" Value="{Binding InputCharacterCommand}"/>
+            <Setter Property="CommandParameter" Value="{Binding Content ,RelativeSource={RelativeSource Mode=Self}}"/>
+        </Style>
+
     </Application.Resources>
 
 </views:MvxApplication>

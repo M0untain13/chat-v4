@@ -16,14 +16,16 @@
         <DockPanel.InputBindings>
             <KeyBinding Key="Enter" Command="{Binding AuthCommand}"/>
         </DockPanel.InputBindings>
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="Помощь">
-                <TextBlock Text="Бог поможет..."/>
-            </MenuItem>
-        </Menu>
-        <StatusBar DockPanel.Dock="Bottom">
+        <StatusBar DockPanel.Dock="Top" Background="{StaticResource back}">
+            <Button Click="HelpButtonClick">
+                <TextBlock Text="Помощь" Margin="10"/>
+            </Button>
+        </StatusBar>
+        <StatusBar DockPanel.Dock="Bottom" Background="{StaticResource back}">
             <StatusBarItem>
-                <TextBlock Text="{Binding Path=LoadMessage}"/>
+                <TextBlock Text="{Binding Path=StatusMessage}" 
+                           Foreground="{StaticResource text}"
+                           Margin="10"/>
             </StatusBarItem>
         </StatusBar>
         <Grid>
@@ -39,17 +41,28 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Column="1" Grid.Row="1" Text="Введите имя"
-                       VerticalAlignment="Center" HorizontalAlignment="Center"
-                       FontSize="20" FontFamily="Arial"/>
-            <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                     VerticalAlignment="Center" HorizontalAlignment="Center"
-                     FontSize="20" FontFamily="Arial"
-                     Width="150" Height="70"
-                     TextAlignment="Center" VerticalContentAlignment="Center"/>
-            <Button Content="Отправить" 
-                    Grid.Column="1" Grid.Row="3" 
-                    Command="{Binding AuthCommand}"/>
+            <Grid Grid.Column="1" Grid.Row="1" Background="{StaticResource back}" Margin="10">
+                <TextBlock Text="Введите имя"
+                           VerticalAlignment="Center" HorizontalAlignment="Center"
+                           FontSize="20" FontFamily="Arial"
+                           Background="Transparent"
+                           Foreground="{StaticResource text}"/>
+            </Grid>
+            <Grid Grid.Column="1" Grid.Row="2" Background="{StaticResource back}" Margin="10">
+                <TextBox Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         VerticalAlignment="Center" HorizontalAlignment="Center"
+                         FontSize="20" FontFamily="Arial"
+                         MinWidth="100" MaxLength="16"
+                         Width="1920" Height="1080"
+                         TextAlignment="Center" VerticalContentAlignment="Center"
+                         Background="Transparent"
+                         Foreground="{StaticResource text}"
+                         BorderBrush="Transparent"/>
+            </Grid>
+            <Grid Grid.Column="1" Grid.Row="3" Background="{StaticResource back}" Margin="10">
+                <Button Content="Отправить"
+                        Command="{Binding AuthCommand}"/>
+            </Grid>
         </Grid>
     </DockPanel>
 
