@@ -1,4 +1,7 @@
 ﻿namespace NetArc.Client;
+using System.Net;
+using System.Net.Sockets;
+
 
 /// <summary>
 /// Слушатель вещаний сервера
@@ -9,8 +12,14 @@ internal class ListenerUdp
     /// Создать слушатель
     /// </summary>
     /// <param name="port"> Порт для прослушки вещаний </param>
+
+    private const int listenPort = 8000;
+
     public ListenerUdp(int port)
     {
+        UdpClient listener = new UdpClient(listenPort);
+        IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, listenPort);
+
         throw new NotImplementedException();
     }
 

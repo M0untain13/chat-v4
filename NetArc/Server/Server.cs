@@ -1,4 +1,6 @@
 ﻿namespace NetArc.Server;
+using System.Net;
+using System.Net.Sockets;
 
 /// <summary>
 /// Стартовая точка для создания сервера
