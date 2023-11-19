@@ -56,12 +56,12 @@
 												x:Key="messageTemplateSelector"/>
 			</Grid.Resources>
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="3*"/>
-				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition/>
+				<ColumnDefinition Width="150"/>
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
-				<RowDefinition Height="3*"/>
-				<RowDefinition Height="1*"/>
+				<RowDefinition/>
+				<RowDefinition Height="80"/>
 			</Grid.RowDefinitions>
 			<ListBox Name="Messages"
 					 Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"
@@ -69,27 +69,37 @@
 					 Padding="10"
 					 ItemTemplateSelector="{StaticResource messageTemplateSelector}"
 					 Background="Transparent"
-                     BorderBrush="Transparent">
+                     BorderBrush="Transparent"
+                     VirtualizingPanel.ScrollUnit="Pixel"
+                     VirtualizingPanel.VirtualizationMode="Recycling"
+                     VirtualizingPanel.IsVirtualizing="True"
+                     VirtualizingPanel.CacheLength="10">
 				<!-- Стиль для того, чтобы элементы не выделялись синим цветом при наведении курсором -->
-				<ListBox.ItemContainerStyle>
-					<Style TargetType="ListBoxItem">
-						<Setter Property="Template">
-							<Setter.Value>
-								<ControlTemplate TargetType="ListBoxItem">
-									<ContentPresenter/>
-								</ControlTemplate>
-							</Setter.Value>
-						</Setter>
-					</Style>
-				</ListBox.ItemContainerStyle>
-			</ListBox>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <ContentPresenter/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
             <Grid Grid.Column="0" Grid.Row="1" Margin="10" Background="{StaticResource back}">
-				<TextBox Text="{Binding Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                <TextBox Text="{Binding Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 						 Background="Transparent"
 						 MaxLength="64"
 						 TextWrapping="Wrap"
                          Foreground="{StaticResource text}"
-                         BorderBrush="Transparent"/>
+                         BorderBrush="Transparent">
+                </TextBox>
 			</Grid>
             <Grid Grid.Column="1" Grid.Row="1" Background="{StaticResource back}" Margin="10">
 				<Button Content="Отправить"

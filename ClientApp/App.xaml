@@ -8,7 +8,8 @@
     StartupUri="/Views/MainWindow.xaml">
 
     <Application.Resources>
-        
+
+        <!-- Цвета приложения -->
         <Brush x:Key="back">
             #FF1C2027
         </Brush>
@@ -18,7 +19,8 @@
         <Brush x:Key="text">
             white
         </Brush>
-
+        
+        <!-- Стиль кнопки -->
         <Style TargetType="Button" x:Key="BaseButtonStyle">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="FontFamily" Value="Arial"/>
@@ -40,6 +42,12 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+            <Setter Property="Command" Value="{Binding InputCharacterCommand}"/>
+            <Setter Property="CommandParameter" Value="{Binding Content ,RelativeSource={RelativeSource Mode=Self}}"/>
+        </Style>
+
+        <!-- Стиль поля для ввода -->
         <Style TargetType="TextBox">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
@@ -47,7 +55,28 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="FontFamily" Value="Arial"/>
             <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="Bd" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                Background="{TemplateBinding Background}" 
+                                SnapsToDevicePixels="true">
+                            <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
+
+        <!-- Стиль текста без ввода -->
         <Style TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="TextAlignment" Value="Center"/>
@@ -55,9 +84,54 @@
             <Setter Property="FontSize" Value="20"/>
         </Style>
 
-        <Style TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-            <Setter Property="Command" Value="{Binding InputCharacterCommand}"/>
-            <Setter Property="CommandParameter" Value="{Binding Content ,RelativeSource={RelativeSource Mode=Self}}"/>
+        <!-- Стиль для скроллера -->
+        <!-- Фон скроллера -->
+        <Style x:Key="ScrollBarPageButtonStyle" TargetType="{x:Type RepeatButton}">
+            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Border BorderBrush="Transparent"></Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Ползунок -->
+        <Style x:Key="ScrollBarThumbStyle" TargetType="{x:Type Thumb}">
+            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="Margin" Value="1,0,1,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Rectangle Fill="{StaticResource back}" Margin="2"></Rectangle>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Создаём свой шаблон для скроллера -->
+        <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition MaxHeight="2"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition MaxHeight="2"/>
+                </Grid.RowDefinitions>
+
+                <Track Name="PART_Track" Grid.Row="1" 
+                   IsDirectionReversed="True">
+                    <Track.Thumb>
+                        <Thumb Style="{StaticResource ScrollBarThumbStyle}">
+                        </Thumb>
+                    </Track.Thumb>
+                </Track>
+            </Grid>
+        </ControlTemplate>
+        <!-- Применяем шаблон через стиль -->
+        <Style TargetType="{x:Type ScrollBar}">
+            <Setter Property="Template" Value="{StaticResource VerticalScrollBar}"/>
         </Style>
 
     </Application.Resources>

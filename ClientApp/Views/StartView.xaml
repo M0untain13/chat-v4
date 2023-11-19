@@ -31,14 +31,14 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="180"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="80"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid Grid.Column="1" Grid.Row="1" Background="{StaticResource back}" Margin="10">
@@ -57,7 +57,8 @@
                          TextAlignment="Center" VerticalContentAlignment="Center"
                          Background="Transparent"
                          Foreground="{StaticResource text}"
-                         BorderBrush="Transparent"/>
+                         BorderBrush="Transparent">
+                </TextBox>
             </Grid>
             <Grid Grid.Column="1" Grid.Row="3" Background="{StaticResource back}" Margin="10">
                 <Button Content="Отправить"
