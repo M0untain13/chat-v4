@@ -7,160 +7,160 @@ using NetArc;
 
 namespace ClientCore.ViewModels
 {
-    public class StartViewModel : MvxViewModel
-    {
-        #region Сервисы
+	public class StartViewModel : MvxViewModel
+	{
+		#region Сервисы
 
-        private readonly IClientService _clientService;
-        private readonly IMvxNavigationService _navigationService;
+		private readonly IClientService _clientService;
+		private readonly IMvxNavigationService _navigationService;
 
-        #endregion
+		#endregion
 
-        #region Поле для ввода имени пользователя
+		#region Поле для ввода имени пользователя
 
-        private string _name = string.Empty;
-        public string Name
-        {
-            get => _name;
-            set => SetProperty(ref _name, value);
-        }
+		private string _name = string.Empty;
+		public string Name
+		{
+			get => _name;
+			set => SetProperty(ref _name, value);
+		}
 
-        #endregion
+		#endregion
 
-        #region Поле заргрузки
+		#region Поле загрузки
 
-        private string _loadMessage = "Подождите, идёт подключение к серверу...";
-        public string LoadMessage
-        {
-            get => _loadMessage;
-            set => SetProperty(ref _loadMessage, value);
-        }
+		private string _loadMessage = "Подождите, идёт подключение к серверу...";
+		public string LoadMessage
+		{
+			get => _loadMessage;
+			set => SetProperty(ref _loadMessage, value);
+		}
 
-        #endregion
+		#endregion
 
-        #region Сообщение статус-бара
+		#region Сообщение статус-бара
 
-        private ushort _timer = 0;
+		private ushort _timer = 0;
 
-        private string _statusMessage = string.Empty;
-        public string StatusMessage
-        {
-            get => _statusMessage;
-            set
-            {
-                if (SetProperty(ref _statusMessage, value))
-                {
-                    // Установка таймера для сброса сообщения в статус-баре
-                    _timer = 3;
-                }
-            }
-        }
+		private string _statusMessage = string.Empty;
+		public string StatusMessage
+		{
+			get => _statusMessage;
+			set
+			{
+				if (SetProperty(ref _statusMessage, value))
+				{
+					// Установка таймера для сброса сообщения в статус-баре
+					_timer = 3;
+				}
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #region Команды
+		#region Команды
 
-        public IMvxAsyncCommand AuthCommand { get; }
+		public IMvxAsyncCommand AuthCommand { get; }
 
-        #endregion
+		#endregion
 
-        public StartViewModel(
-            IClientService clientService,
-            IMvxNavigationService navigationService
-        )
-        {
-            #region Инициализация сервисов
+		public StartViewModel(
+			IClientService clientService,
+			IMvxNavigationService navigationService
+		)
+		{
+			#region Инициализация сервисов
 
-            _clientService = clientService;
-            _navigationService = navigationService;
+			_clientService = clientService;
+			_navigationService = navigationService;
 
-            #endregion
+			#endregion
 
-            #region Инициализация команд
+			#region Инициализация команд
 
-            AuthCommand = new MvxAsyncCommand(
-                () =>
-                {
-                    if (!_isStart)
-                        return Task.Run(() =>
-                        {
-                            StatusMessage = "Пока что нет соединения.";
-                        });
+			AuthCommand = new MvxAsyncCommand(
+				() =>
+				{
+					if (!_isStart)
+						return Task.Run(() =>
+						{
+							StatusMessage = "Пока что нет соединения.";
+						});
 
-                    if (_name == "")
-                        return Task.Run(() =>
-                        {
-                            StatusMessage = "Введено пустое имя.";
-                        });
+					if (_name == "")
+						return Task.Run(() =>
+						{
+							StatusMessage = "Введено пустое имя.";
+						});
 
-                    // TODO: вернуть _client.Send($"{Tag.AUTH}{Name}");
-                    // TODO: убрать строку внизу
-                    return Task.Run(() =>
-                    {
-                        _Callback(Name is "Валера" or "Димон"
-                            ? new WebMessage("server", "auth", Name, "denied")
-                            : new WebMessage("server", "auth", Name, "accept"));
-                    });
-                }
-            );
+					// TODO: вернуть _client.Send($"{Tag.AUTH}{Name}");
+					// TODO: убрать строку внизу
+					return Task.Run(() =>
+					{
+						_Callback(Name is "Валера" or "Димон"
+							? new WebMessage("server", "auth", Name, "denied")
+							: new WebMessage("server", "auth", Name, "accept"));
+					});
+				}
+			);
 
-            #endregion
+			#endregion
 
-            #region Подключение к серверу
+			#region Подключение к серверу
 
-            Task.Run(() =>
-            {
-                //TODO: убрать эту строку
-                StatusMessage = "Подключение к серверу...";
-                Thread.Sleep(3000);
+			Task.Run(() =>
+			{
+				//TODO: убрать эту строку
+				StatusMessage = "Подключение к серверу...";
+				Thread.Sleep(3000);
 
-                do
-                {
-                    _client = _clientService.GetClient(_Callback, 8000, 8001);
+				do
+				{
+					_client = _clientService.GetClient(_Callback, 8000, 8001);
                     _isStart = _client.Start();
-                } while (!_isStart);
+				} while (!_isStart);
 
-                StatusMessage = "Клиент подключился к серверу!";
-            });
+				StatusMessage = "Клиент подключился к серверу!";
+			});
 
-            #endregion
+			#endregion
 
-            #region Таймер для сброса статус-бара
+			#region Таймер для сброса статус-бара
 
-            Task.Run(() =>
-            {
-                while (true)
-                {
-                    Thread.Sleep(1000);
-                    if (_timer > 0)
-                        _timer--;
-                    if (_timer == 0)
-                        StatusMessage = "";
-                }
-            });
+			Task.Run(() =>
+			{
+				while (true)
+				{
+					Thread.Sleep(1000);
+					if (_timer > 0)
+						_timer--;
+					if (_timer == 0)
+						StatusMessage = "";
+				}
+			});
 
-            #endregion
-        }
+			#endregion
+		}
 
-        private IClientWrapper _client = null!;
-        private bool _isStart;
+		private IClientWrapper _client = null!;
 
-        private void _Callback(WebMessage message)
-        {
-            // TODO: наверное надо будет ещё сравнивать имя, а то вдруг сервер одобрит авторизацию не тому
-            if (message.sender == "server" && message.type == "auth" && message.name == Name)
-            {
-                if(message.text == "accept")
-                {
-                    StatusMessage = "Авторизация одобрена!";
-                    Thread.Sleep(1000);
-                    _navigationService.Navigate<ChatViewModel, (IClientWrapper, string)>((_client, Name));
-                }
-                else
-                {
-                    StatusMessage = "Авторизация отклонена.";
-                }
-            }
-        }
-    }
+		private bool _isStart;
+
+		private void _Callback(WebMessage message)
+		{
+			if (message.sender == "server" && message.type == "auth" && message.name == Name)
+			{
+				if(message.text == "accept")
+				{
+					StatusMessage = "Авторизация одобрена!";
+					Thread.Sleep(1000);
+					_navigationService.Navigate<ChatViewModel, (IClientWrapper, string)>((_client, Name));
+				}
+				else
+				{
+					StatusMessage = "Авторизация отклонена.";
+				}
+			}
+		}
+	}
 }
