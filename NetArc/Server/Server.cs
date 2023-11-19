@@ -1,6 +1,7 @@
-﻿namespace NetArc.Server;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
+namespace NetArc.Server;
+
 
 /// <summary>
 /// Стартовая точка для создания сервера
@@ -14,9 +15,21 @@ public class Server
     /// <param name="listenPort"> Порт для прослушки соединений </param>
     /// <param name="broadcastPort"> Порт для вещания </param>
     /// <param name="broadcastTimeout"> Периодичность отправления вещаний в мс </param>
+
+    private readonly int _listenPort;
+    private readonly int _broadcastPort;
+    private readonly int _broadcastTimeout;
+    private Action<WebMessage> _messageCallback;
+
+    private ServerUdp _udpServer;
+
     public Server(Action<WebMessage> callback, int listenPort, int broadcastPort, int broadcastTimeout)
     {
-        throw new NotImplementedException();
+        _messageCallback = callback;
+        _listenPort = listenPort;
+        _broadcastPort = broadcastPort;
+        _broadcastTimeout = broadcastTimeout;
+        _udpServer = new ServerUdp(broadcastPort, broadcastTimeout);
     }
 
     /// <summary>
@@ -24,7 +37,7 @@ public class Server
     /// </summary>
     public bool Start()
     {
-        throw new NotImplementedException();
+        return true;
     }
 
     /// <summary>

@@ -6,7 +6,7 @@ using System.Net.Sockets;
 /// <summary>
 /// Слушатель вещаний сервера
 /// </summary>
-internal class ListenerUdp
+internal class ClientUdp
 {
     /// <summary>
     /// Создать слушатель
@@ -15,7 +15,7 @@ internal class ListenerUdp
 
     private const int listenPort = 8000;
 
-    public ListenerUdp(int port)
+    public ClientUdp(int port)
     {
         UdpClient listener = new UdpClient(listenPort);
         IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, listenPort);

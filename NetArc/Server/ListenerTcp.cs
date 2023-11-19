@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.Net.Sockets;
 
 namespace NetArc.Server;
 
@@ -25,6 +26,8 @@ internal class ListenerTcp
     /// </summary>
     public bool Start()
     {
+        //Socket server;
+        //Socket client = server.Accept();
         throw new NotImplementedException();
     }
 
