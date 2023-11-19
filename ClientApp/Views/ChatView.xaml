@@ -34,21 +34,25 @@
 				<DataTemplate x:Key="leftMessageTemplate">
                     <StackPanel HorizontalAlignment="Left" Background="{StaticResource back}" Margin="10">
 						<TextBlock Text="{Binding Path=Name}" Margin="10,10,10,5"
-                                   Foreground="DeepSkyBlue"/>
+                                   Foreground="DeepSkyBlue"
+                                   TextAlignment="Left"/>
 						<TextBlock Text="{Binding Path=Text}" Margin="10,5,10,10" 
 								   TextWrapping="Wrap"
 								   MaxWidth="300" MinWidth="100"
-                                   Foreground="{StaticResource text}"/>
+                                   Foreground="{StaticResource text}"
+                                   TextAlignment="Left"/>
 					</StackPanel>
 				</DataTemplate>
 				<DataTemplate x:Key="rightMessageTemplate">
                     <StackPanel HorizontalAlignment="Right" Background="{StaticResource back}" Margin="10">
 						<TextBlock Text="{Binding Path=Name}" Margin="10,10,10,5"
-                                   Foreground="DeepPink"/>
+                                   Foreground="DeepPink"
+                                   TextAlignment="Left"/>
 						<TextBlock Text="{Binding Path=Text}" Margin="10,5,10,10" 
 								   TextWrapping="Wrap" 
 								   MaxWidth="300" MinWidth="100"
-                                   Foreground="{StaticResource text}"/>
+                                   Foreground="{StaticResource text}"
+                                   TextAlignment="Left"/>
 					</StackPanel>
 				</DataTemplate>
 				<infstr:MessageTemplateSelector LeftMessageTemplate="{StaticResource leftMessageTemplate}"
