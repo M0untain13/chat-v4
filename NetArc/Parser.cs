@@ -1,24 +1,8 @@
 ﻿namespace NetArc;
 
-public class WebMessage
+internal class Parser
 {
-	public string sender;
-	public string type;
-	public string name;
-	public string text;
-
-	public WebMessage(string sender, string type, string name, string text)
-	{
-		this.sender = sender;
-		this.type = type;
-		this.name = name;
-		this.text = text;
-	}
-}
-
-internal static class Parser
-{
-	public static string CreateMessage(WebMessage webMessage)
+	public string CreateMessage(WebMessage webMessage)
 	{
 		var senderTage = $"<sender>{webMessage.sender}</sender>";
 		var typeTage = $"<type>{webMessage.type}</type>";
@@ -28,7 +12,7 @@ internal static class Parser
 		return string.Concat(senderTage, typeTage, nameTage, textTage);
 	}
 
-	public static WebMessage ParseMessage(string message)
+	public WebMessage ParseMessage(string message)
 	{
 		// TODO: сделаем вид, что на вход всегда подаются правильные данные без ошибок
 		var sender = _ParseTag(message, "<sender>", "</sender>");
@@ -39,7 +23,7 @@ internal static class Parser
 		return new WebMessage(sender, type, name, text);
 	}
 
-	private static string _ParseTag(string message, string tagS, string tagE)
+	private string _ParseTag(string message, string tagS, string tagE)
 	{
 		var start = message.IndexOf(tagS, StringComparison.Ordinal) + tagS.Length;
 		var end = message.IndexOf(tagE, StringComparison.Ordinal) - start;
