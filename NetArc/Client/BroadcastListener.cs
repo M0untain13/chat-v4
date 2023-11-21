@@ -8,13 +8,13 @@ using System.Net.Sockets;
 /// <summary>
 /// Слушатель вещаний сервера
 /// </summary>
-internal class ClientUdp
+internal class BroadcastListener
 {
     /// <summary>
     /// Создать слушатель
     /// </summary>
     /// <param name="port"> Порт для прослушки вещаний </param>
-    public ClientUdp(int port)
+    public BroadcastListener(int port)
     {
         _server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         var ip = new IPEndPoint(IPAddress.Any, port);

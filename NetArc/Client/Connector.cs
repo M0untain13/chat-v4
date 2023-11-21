@@ -5,7 +5,7 @@ namespace NetArc.Client;
 /// <summary>
 /// Соединитель клиента с сервером
 /// </summary>
-internal class ClientTcp
+internal class Connector
 {
     /// <summary>
     /// Создать соединитель
@@ -13,7 +13,7 @@ internal class ClientTcp
     /// <param name="server"> Сокет сервера </param>
     /// <param name="callback"> Метод для обработки сообщений сервера </param>
     /// <param name="port"> Порт для соединения </param>
-    public ClientTcp(Action<WebMessage> callback, int port)
+    public Connector(Action<WebMessage> callback, int port)
     {
         throw new NotImplementedException();
     }
@@ -49,7 +49,7 @@ internal class ClientTcp
     /// </summary>
     /// <param name="callback"> Метод для обработки сообщений сервера </param>
     /// <returns> Удалось ли установить обработчик </returns>
-    public bool SetCallback(Action<string> callback)
+    public bool SetCallback(Action<WebMessage> callback)
     {
         throw new NotImplementedException();
     }
