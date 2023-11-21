@@ -1,4 +1,8 @@
-﻿namespace NetArc;
+﻿using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("TestForNetArc")]
+
+namespace NetArc;
 
 internal class Parser
 {
