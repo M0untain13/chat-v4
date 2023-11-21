@@ -1,4 +1,6 @@
-﻿using System.Net.Sockets;
+﻿using System.Net;
+using System.Net.Sockets;
+using System.Text;
 
 namespace NetArc.Client;
 
@@ -15,7 +17,24 @@ internal class Connector
     /// <param name="port"> Порт для соединения </param>
     public Connector(Action<WebMessage> callback, int port)
     {
-        throw new NotImplementedException();
+        _callback = callback;
+        _port = port;
+        var ip = new IPEndPoint(IPAddress.Any, _port);
+        _server = new TcpClient(ip);
+        _stream = _server.GetStream();
+        _receiver = new Task(() =>
+        {
+            var parser = new Parser();
+            while (_isStart)
+            {
+                var buffer = new byte[1024];
+                var size = _stream.Read(buffer);
+                if (size > 0)
+                {
+                    _callback(parser.ParseMessage(Encoding.ASCII.GetString(buffer, 0, size)));
+                }
+            }
+        });
     }
 
     /// <summary>
@@ -23,7 +42,13 @@ internal class Connector
     /// </summary>
     public bool Start(string ip)
     {
-        throw new NotImplementedException();
+        var ipep = new IPEndPoint(IPAddress.Parse(ip), _port);
+        _server.Connect(ipep);
+
+        _isStart = true;
+        _receiver.Start();
+        
+        return true;
     }
 
     /// <summary>
@@ -32,7 +57,15 @@ internal class Connector
     /// <exception cref="NotImplementedException"></exception>
     public bool Stop()
     {
-        throw new NotImplementedException();
+        if (!_isStart)
+            return false;
+        
+        _isStart = false;
+        _server.Close();
+        _stream.Close();
+        _receiver.Wait();
+
+        return true;
     }
 
     /// <summary>
@@ -41,7 +74,15 @@ internal class Connector
     /// <param name="message"> Текст сообщения </param>
     public bool Send(string message)
     {
-        throw new NotImplementedException();
+        if (!_isStart)
+            return false;
+
+        Task.Run(() =>
+        {
+            _stream.Write(Encoding.ASCII.GetBytes(message));
+        });
+
+        return true;
     }
 
     /// <summary>
@@ -49,8 +90,14 @@ internal class Connector
     /// </summary>
     /// <param name="callback"> Метод для обработки сообщений сервера </param>
     /// <returns> Удалось ли установить обработчик </returns>
-    public bool SetCallback(Action<WebMessage> callback)
-    {
-        throw new NotImplementedException();
-    }
+    public void SetCallback(Action<WebMessage> callback) => _callback = callback;
+
+    private readonly TcpClient _server;
+    private readonly NetworkStream _stream;
+    private readonly Task _receiver;
+    private readonly int _port;
+
+    private Action<WebMessage> _callback; 
+
+    private bool _isStart;
 }

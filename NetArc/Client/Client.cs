@@ -43,7 +43,7 @@ public class Client
     /// </summary>
     /// <param name="callback"> Метод для обработки сообщений сервера </param>
     /// <returns> Удалось ли установить обработчик </returns>
-    public bool SetCallback(Action<WebMessage> callback) => _connector.SetCallback(callback);
+    public void SetCallback(Action<WebMessage> callback) => _connector.SetCallback(callback);
 
     private readonly Parser _parser;
 	private readonly BroadcastListener _listener;

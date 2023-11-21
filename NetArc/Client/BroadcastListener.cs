@@ -16,7 +16,7 @@ internal class BroadcastListener
     public BroadcastListener(int port)
     {
         _ip = new IPEndPoint(IPAddress.Any, port);
-        _epClient = new UdpClient(_ip);
+        _server = new UdpClient(_ip);
     }
 
     /// <summary>
@@ -25,11 +25,11 @@ internal class BroadcastListener
     /// <returns> IP сервера в виде текста </returns>
     public string GetServerIp()
     {
-        var buffer = _epClient.Receive(ref _ip);
+        var buffer = _server.Receive(ref _ip);
         return Encoding.ASCII.GetString(buffer);
     }
 
     private IPEndPoint _ip;
 
-    private readonly UdpClient _epClient;
+    private readonly UdpClient _server;
 }
