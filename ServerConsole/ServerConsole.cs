@@ -9,7 +9,6 @@ namespace ServerConsole
     {
         private static bool _isStart;
 
-        // TODO: Создать сервер, запустить сервер, отправлять сообщения клиентам
         private static void Main()
         {
             var server = new Server(Callback, 8000, 8001, 2000);
@@ -42,10 +41,9 @@ namespace ServerConsole
             }
         }
 
-        // TODO: Метод для получения сообщений с клиентов
-        private static void Callback(WebMessage message)
+        private static void Callback(string message)
         {
-            
+            Console.WriteLine(message);
         }
     }
 }

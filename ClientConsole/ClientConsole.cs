@@ -8,7 +8,6 @@ namespace ClientConsole
         private static string _name = "anon";
         private static bool _isStart;
 
-        // TODO: Создать клиент, запустить клиент, отправлять сообщения серверу
         private static void Main()
         {
             var client = new Client(Callback, 8000, 8001);
@@ -45,7 +44,6 @@ namespace ClientConsole
             }
         }
 
-        // TODO: Метод для получения сообщений с сервера
         private static void Callback(WebMessage message)
         {
             switch (message)
