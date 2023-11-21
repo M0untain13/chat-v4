@@ -52,7 +52,7 @@ public class Server
     /// Отправить сообщение через прослушку
     /// </summary>
     /// <param name="message"> Текст сообщения </param>
-    public bool Send(WebMessage message)
+    public bool Send(string message)
     {
         throw new NotImplementedException();
     }

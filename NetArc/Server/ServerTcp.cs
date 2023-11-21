@@ -17,7 +17,7 @@ internal class ServerTcp
     
     private static int SERVERUDPPORT = 8000;
     private Socket _UdpSocket;
-    public ServerTcp(Socket client, Action<string> callback)
+    public ServerTcp(Socket client, Action<WebMessage> callback)
     {
         _UdpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         _UdpSocket.Bind(new IPEndPoint(IPAddress.Any, SERVERUDPPORT));

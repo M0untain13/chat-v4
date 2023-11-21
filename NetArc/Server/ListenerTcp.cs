@@ -3,6 +3,8 @@ using System.Net.Sockets;
 
 namespace NetArc.Server;
 
+// TODO: !!ВАЖНО!! Listener callback сервера использует для логирования в консоль, а в connection он должен передавать собственный колбек для обработки входящих сообщений 
+
 /// <summary>
 /// Слушатель входящих соединений с клиентов
 /// </summary>
