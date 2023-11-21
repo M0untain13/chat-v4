@@ -1,9 +1,8 @@
 ﻿using System.Text;
-
-namespace NetArc.Client;
 using System.Net;
 using System.Net.Sockets;
 
+namespace NetArc.Client;
 
 /// <summary>
 /// Слушатель вещаний сервера
@@ -16,10 +15,8 @@ internal class BroadcastListener
     /// <param name="port"> Порт для прослушки вещаний </param>
     public BroadcastListener(int port)
     {
-        _server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-        var ip = new IPEndPoint(IPAddress.Any, port);
-        _ep = ip;
-        _server.Bind(ip);
+        _ip = new IPEndPoint(IPAddress.Any, port);
+        _epClient = new UdpClient(_ip);
     }
 
     /// <summary>
@@ -28,11 +25,11 @@ internal class BroadcastListener
     /// <returns> IP сервера в виде текста </returns>
     public string GetServerIp()
     {
-        byte[] buffer = new byte[1024];
-        _server.ReceiveFrom(buffer, ref _ep);
+        var buffer = _epClient.Receive(ref _ip);
         return Encoding.ASCII.GetString(buffer);
     }
 
-    private EndPoint _ep;
-    private readonly Socket _server;
+    private IPEndPoint _ip;
+
+    private readonly UdpClient _epClient;
 }
