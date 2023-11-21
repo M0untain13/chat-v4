@@ -13,7 +13,7 @@ internal class ClientTcp
     /// <param name="server"> Сокет сервера </param>
     /// <param name="callback"> Метод для обработки сообщений сервера </param>
     /// <param name="port"> Порт для соединения </param>
-    public ClientTcp(Socket server, Action<string> callback, int port)
+    public ClientTcp(Action<WebMessage> callback, int port)
     {
         throw new NotImplementedException();
     }
@@ -21,7 +21,7 @@ internal class ClientTcp
     /// <summary>
     /// Сделать попытку соединения с сервером, если получилось, то начать прослушку входящих сообщений с сервера
     /// </summary>
-    public bool Start()
+    public bool Start(string ip)
     {
         throw new NotImplementedException();
     }

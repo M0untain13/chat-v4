@@ -1,4 +1,6 @@
-﻿namespace NetArc.Client;
+﻿using System.Text;
+
+namespace NetArc.Client;
 using System.Net;
 using System.Net.Sockets;
 
@@ -12,31 +14,12 @@ internal class ClientUdp
     /// Создать слушатель
     /// </summary>
     /// <param name="port"> Порт для прослушки вещаний </param>
-
-    private const int listenPort = 8000;
-
     public ClientUdp(int port)
     {
-        UdpClient listener = new UdpClient(listenPort);
-        IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, listenPort);
-
-        throw new NotImplementedException();
-    }
-
-    /// <summary>
-    /// Начать прослушку. True должен вернуть в том случае, когда удалось получить IP сервера.
-    /// </summary>
-    public bool Start()
-    {
-        throw new NotImplementedException();
-    }
-
-    /// <summary>
-    /// Остановить прослушку
-    /// </summary>
-    public bool Stop()
-    {
-        throw new NotImplementedException();
+        _server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        var ip = new IPEndPoint(IPAddress.Any, port);
+        _ep = ip;
+        _server.Bind(ip);
     }
 
     /// <summary>
@@ -45,6 +28,11 @@ internal class ClientUdp
     /// <returns> IP сервера в виде текста </returns>
     public string GetServerIp()
     {
-        throw new NotImplementedException();
+        byte[] buffer = new byte[1024];
+        _server.ReceiveFrom(buffer, ref _ep);
+        return Encoding.ASCII.GetString(buffer);
     }
+
+    private EndPoint _ep;
+    private readonly Socket _server;
 }
