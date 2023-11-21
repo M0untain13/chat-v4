@@ -55,7 +55,7 @@ namespace ClientConsole
                     _name = message.name;
                     break;
                 case { sender: "server", type: "exit" }:
-                    Console.WriteLine("Сервер завершил свою работу...");
+                    Console.WriteLine($"Сервер завершил свою работу. {message.text}.");
                     _isStart = false;
                     break;
                 case { sender: "client", type: "message" }:
