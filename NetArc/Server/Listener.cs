@@ -8,7 +8,7 @@ namespace NetArc.Server;
 /// <summary>
 /// Слушатель входящих соединений с клиентов
 /// </summary>
-internal class ListenerTcp
+internal class Listener
 {
     /// <summary>
     /// Создать прослушку
@@ -18,7 +18,7 @@ internal class ListenerTcp
 
     static List<string> Clients = new List<string>(); // Список "подключенных" клиентов
 
-    public ListenerTcp(Action<string> callback, int port)
+    public Listener(Action<string> callback, int port)
     {
         throw new NotImplementedException();
     }
@@ -45,7 +45,7 @@ internal class ListenerTcp
     /// Отправить сообщения всем клиентам
     /// </summary>
     /// <param name="message"> Текст сообщения </param>
-    public bool Send(string message)
+    public bool Send(WebMessage message)
     {
         throw new NotImplementedException();
     }

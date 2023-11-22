@@ -8,7 +8,7 @@ namespace NetArc.Server;
 /// <summary>
 /// Вещатель, который должен распространять по сети IP сервера для подключению к нему
 /// </summary>
-internal class ServerUdp
+internal class Broadcaster
 {
     /// <summary>
     /// Создать вещатель
@@ -24,7 +24,7 @@ internal class ServerUdp
     private static int SERVERUDPPORT = 8000;
     private Socket UPDServertSocket;
     private const int broadcastTimeout = 2000;
-    public ServerUdp(int port, int broadcastTimeout)
+    public Broadcaster(int port, int broadcastTimeout)
     {
         try
         {

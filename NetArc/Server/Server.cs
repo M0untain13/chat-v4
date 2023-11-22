@@ -15,21 +15,10 @@ public class Server
     /// <param name="listenPort"> Порт для прослушки соединений </param>
     /// <param name="broadcastPort"> Порт для вещания </param>
     /// <param name="broadcastTimeout"> Периодичность отправления вещаний в мс </param>
-
-    private readonly int _listenPort;
-    private readonly int _broadcastPort;
-    private readonly int _broadcastTimeout;
-    private Action<WebMessage> _messageCallback;
-
-    private ServerUdp _udpServer;
-
-    public Server(Action<WebMessage> callback, int listenPort, int broadcastPort, int broadcastTimeout)
+    public Server(Action<string> callback, int listenPort, int broadcastPort, int broadcastTimeout)
     {
-        _messageCallback = callback;
-        _listenPort = listenPort;
-        _broadcastPort = broadcastPort;
-        _broadcastTimeout = broadcastTimeout;
-        _udpServer = new ServerUdp(broadcastPort, broadcastTimeout);
+        _broadcaster = new Broadcaster(broadcastPort, broadcastTimeout);
+        _listener = new Listener(callback, listenPort);
     }
 
     /// <summary>
@@ -37,7 +26,7 @@ public class Server
     /// </summary>
     public bool Start()
     {
-        return true;
+        return _broadcaster.Start() && _listener.Start();
     }
 
     /// <summary>
@@ -45,15 +34,18 @@ public class Server
     /// </summary>
     public bool Stop()
     {
-        throw new NotImplementedException();
+        return _broadcaster.Stop() || _listener.Stop();
     }
 
     /// <summary>
     /// Отправить сообщение через прослушку
     /// </summary>
     /// <param name="message"> Текст сообщения </param>
-    public bool Send(string message)
+    public bool Send(WebMessage message)
     {
-        throw new NotImplementedException();
+        return _listener.Send(message);
     }
+
+    private readonly Broadcaster _broadcaster;
+    private readonly Listener _listener;
 }
