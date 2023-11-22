@@ -16,7 +16,7 @@ internal class ListenerTcp
     /// <param name="callback"> Метод для обработки сообщений клиентов </param>
     /// <param name="port"> Порт для прослушивания </param>
 
-    static List<IPEndPoint> Clients = new List<IPEndPoint>(); // Список "подключенных" клиентов
+    static List<string> Clients = new List<string>(); // Список "подключенных" клиентов
 
     public ListenerTcp(Action<string> callback, int port)
     {

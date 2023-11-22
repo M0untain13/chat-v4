@@ -16,7 +16,7 @@ internal class ServerUdp
     /// <param name="port"> Порт для вещания </param>
     /// <param name="broadcastTimeout"> Периодичность отправления вещаний </param>
     
-   
+    
     //UdpClient udpServer = new UdpClient(SERVERUDPPORT);
 
 
@@ -32,23 +32,10 @@ internal class ServerUdp
             UPDServertSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
 
             IPEndPoint endPoint = new IPEndPoint(IPAddress.Broadcast, SERVERUDPPORT);
-
-            Timer broadcastTimer = new Timer(BroadcastIP, null, 0, broadcastTimeout);
+            UPDServertSocket.Bind(endPoint);
+            //Timer broadcastTimer = new Timer(BroadcastIP, null, 0, broadcastTimeout);
         }
-        catch (Exception ex) { };
-    }
-
-    private string GetLocaleIPAddress()
-    {
-        IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
-        foreach (IPAddress ip in host.AddressList)
-        {
-            if (ip.AddressFamily == AddressFamily.InterNetwork)
-            {
-                return ip.ToString();
-            }
-        }
-        return
+        catch (Exception ex) { throw new NotImplementedException(); };
     }
 
 
@@ -57,7 +44,7 @@ internal class ServerUdp
     /// </summary>
     public bool Start()
     {
-        
+        throw new NotImplementedException();
     }
 
     /// <summary>

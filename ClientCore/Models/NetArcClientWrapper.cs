@@ -16,7 +16,7 @@ public class NetArcClientWrapper : IClientWrapper
 
     public bool Send(WebMessage message) => _client.Send(message);
 
-    public bool SetCallback(Action<WebMessage> callback) => _client.SetCallback(callback);
+    public void SetCallback(Action<WebMessage> callback) => _client.SetCallback(callback);
 
     private readonly Client _client;
 }
@@ -31,5 +31,5 @@ public class TempClientWrapper : IClientWrapper
 
     public bool Send(WebMessage message) => true;
 
-    public bool SetCallback(Action<WebMessage> callback) => true;
+    public void SetCallback(Action<WebMessage> callback) { }
 }

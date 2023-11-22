@@ -11,5 +11,5 @@ public interface IClientWrapper
 
     bool Send(WebMessage message);
 
-    bool SetCallback(Action<WebMessage> callback);
+    void SetCallback(Action<WebMessage> callback);
 }

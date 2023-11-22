@@ -21,22 +21,21 @@ internal class ServerTcp
     {
         _UdpSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         _UdpSocket.Bind(new IPEndPoint(IPAddress.Any, SERVERUDPPORT));
-        Console.WriteLine("Сервер инициализирован и ожидает сообщений...");
 
-        Thread UDPThread = new Thread(() =>
+        Parser parser_mes = new Parser();
+
+        Task UDPThread = new Task(() =>
         {
             try
             {
+                while (true)
                 {
-                    while (true)
-                    {
-                        byte[] buffer = new byte[1024];
-                        EndPoint clientEP = new IPEndPoint(IPAddress.Any, 0);
-                        int bytesRead = _UdpSocket.ReceiveFrom(buffer, ref clientEP);
+                    EndPoint clientEP = new IPEndPoint(IPAddress.Any, 0);
+                    //int bytesRead = _UdpSocket.ReceiveFrom(buffer, ref clientEP);
 
-                        string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                        Console.WriteLine("Получено от клиента: " + message);
-                    }
+                    //string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                    //callback(parser_mes.ParseMessage(message));
+                    //Console.WriteLine("Получено от клиента: " + message);
                 }
             }
             catch (SocketException ex)
@@ -45,6 +44,8 @@ internal class ServerTcp
             }
         });
     }
+
+   
 
 
     /// <summary>
