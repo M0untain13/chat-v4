@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Net.Sockets;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace NetArc.Server;
@@ -10,10 +9,6 @@ namespace NetArc.Server;
 /// </summary>
 internal class Broadcaster
 {
-    private Socket UPDServertSocket;
-    private readonly int _broadcastTimeout = 2000;
-    private IPEndPoint _endPoint;
-
     /// <summary>
     /// Создать вещатель
     /// </summary>
@@ -21,18 +16,15 @@ internal class Broadcaster
     /// <param name="broadcastTimeout"> Периодичность отправления вещаний </param>
     public Broadcaster(int port, int broadcastTimeout)
     {
-        UPDServertSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-        UPDServertSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
+        _server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        _server.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
         _endPoint = new IPEndPoint(IPAddress.Broadcast, port);
         
         _broadcastTimeout = broadcastTimeout;
-        UPDServertSocket.Bind(_endPoint);
+
+        _buffer = Encoding.ASCII.GetBytes(Dns.GetHostName());
     }
 
-
-
-    private bool _isStart;
-    private readonly byte[] buffer = new byte[1024];
     /// <summary>
     /// Запустить вещания IP сервера с определённой периодичностью
     /// </summary>
@@ -44,13 +36,12 @@ internal class Broadcaster
         {
             while (_isStart)
             {
-                UPDServertSocket.SendTo(buffer, _endPoint);
+                _server.SendTo(_buffer, _endPoint);
                 Thread.Sleep(_broadcastTimeout);
             }
         });
         return true;
     }
-
 
     /// <summary>
     /// Остановить вещания
@@ -61,4 +52,11 @@ internal class Broadcaster
         _isStart = false;
         return true;
     }
+
+    private readonly Socket _server;
+    private readonly int _broadcastTimeout;
+    private readonly IPEndPoint _endPoint;
+    private readonly byte[] _buffer;
+
+    private bool _isStart;
 }

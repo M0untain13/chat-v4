@@ -17,24 +17,10 @@ internal class Connector
     /// <param name="port"> Порт для соединения </param>
     public Connector(Action<WebMessage> callback, int port)
     {
+        _receiver = null!;
         _callback = callback;
         _port = port;
-        var ip = new IPEndPoint(IPAddress.Any, _port);
-        _server = new TcpClient(ip);
-        _stream = _server.GetStream();
-        _receiver = new Task(() =>
-        {
-            var parser = new Parser();
-            while (_isStart)
-            {
-                var buffer = new byte[1024];
-                var size = _stream.Read(buffer);
-                if (size > 0)
-                {
-                    _callback(parser.ParseMessage(Encoding.ASCII.GetString(buffer, 0, size)));
-                }
-            }
-        });
+        _client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
     }
 
     /// <summary>
@@ -43,10 +29,21 @@ internal class Connector
     public bool Start(string ip)
     {
         var ipep = new IPEndPoint(IPAddress.Parse(ip), _port);
-        _server.Connect(ipep);
-
+        _client.Connect(ipep);
         _isStart = true;
-        _receiver.Start();
+        _receiver = Task.Run(() =>
+        {
+            var parser = new Parser();
+            while (_isStart)
+            {
+                var buffer = new byte[1024];
+                var size = _client.Receive(buffer);
+                if (size > 0)
+                {
+                    _callback(parser.ParseMessage(Encoding.ASCII.GetString(buffer, 0, size)));
+                }
+            }
+        });
         
         return true;
     }
@@ -61,8 +58,7 @@ internal class Connector
             return false;
         
         _isStart = false;
-        _server.Close();
-        _stream.Close();
+        _client.Close();
         _receiver.Wait();
 
         return true;
@@ -79,7 +75,7 @@ internal class Connector
 
         Task.Run(() =>
         {
-            _stream.Write(Encoding.ASCII.GetBytes(message));
+            _client.Send(Encoding.ASCII.GetBytes(message));
         });
 
         return true;
@@ -92,10 +88,10 @@ internal class Connector
     /// <returns> Удалось ли установить обработчик </returns>
     public void SetCallback(Action<WebMessage> callback) => _callback = callback;
 
-    private readonly TcpClient _server;
-    private readonly NetworkStream _stream;
-    private readonly Task _receiver;
+    private readonly Socket _client;
     private readonly int _port;
+
+    private Task _receiver;
 
     private Action<WebMessage> _callback; 
 

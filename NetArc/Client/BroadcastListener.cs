@@ -15,8 +15,9 @@ internal class BroadcastListener
     /// <param name="port"> Порт для прослушки вещаний </param>
     public BroadcastListener(int port)
     {
+        _client = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         _ip = new IPEndPoint(IPAddress.Any, port);
-        _server = new UdpClient(_ip);
+        _client.Bind(_ip);
     }
 
     /// <summary>
@@ -25,11 +26,12 @@ internal class BroadcastListener
     /// <returns> IP сервера в виде текста </returns>
     public string GetServerIp()
     {
-        var buffer = _server.Receive(ref _ip);
-        return Encoding.ASCII.GetString(buffer);
+        var buffer = new byte[1024];
+        var recv = _client.ReceiveFrom(buffer, ref _ip);
+        return Encoding.ASCII.GetString(buffer, 0, recv);
     }
 
-    private IPEndPoint _ip;
+    private EndPoint _ip;
 
-    private readonly UdpClient _server;
+    private readonly Socket _client;
 }

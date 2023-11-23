@@ -3,8 +3,6 @@ using System.Net.Sockets;
 
 namespace NetArc.Server;
 
-// TODO: !!ВАЖНО!! Listener callback сервера использует для логирования в консоль, а в connection он должен передавать собственный колбек для обработки входящих сообщений 
-
 /// <summary>
 /// Слушатель входящих соединений с клиентов
 /// </summary>
@@ -17,10 +15,12 @@ internal class Listener
     /// <param name="port"> Порт для прослушивания </param>
     public Listener(Action<string> callback, int port)
     {
-        _server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        var endPoint = new IPEndPoint(IPAddress.Any, port);
         _callback = callback;
-        _server.Bind(endPoint);
+
+        var ipHost = Dns.GetHostEntry("localhost");
+        var ipAddr = ipHost.AddressList[0];
+        _iep = new IPEndPoint(ipAddr, port);
+        _server = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
     }
 
     /// <summary>
@@ -31,6 +31,8 @@ internal class Listener
         if (_isStart) 
             return false;
 
+        _server.Bind(_iep);
+        _server.Listen();
         _isStart = true;
         Task.Run(() => {
             while(_isStart)
@@ -61,6 +63,7 @@ internal class Listener
     /// Отправить сообщения всем клиентам
     /// </summary>
     /// <param name="message"> Текст сообщения </param>
+    /// <param name="id"></param>
     public bool Send(WebMessage message, int id = -1)
     {
         if (message.sender != "server" && id < 0)
@@ -102,8 +105,9 @@ internal class Listener
     private readonly List<(string, Connection)> _clients = new();
     private readonly Action<string> _callback;
     private readonly Socket _server;
+    private readonly IPEndPoint _iep;
 
-    private int _nextId = 0;
+    private int _nextId;
     private int NextId => _nextId++;
 
     private bool _isStart;

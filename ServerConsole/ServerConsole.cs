@@ -1,7 +1,5 @@
 ﻿using NetArc;
-using NetArc.Client;
 using NetArc.Server;
-using System.Xml.Linq;
 
 namespace ServerConsole
 {
@@ -11,7 +9,7 @@ namespace ServerConsole
 
         private static void Main()
         {
-            var server = new Server(Callback, 8000, 8001, 2000);
+            var server = new Server(Callback, 8002, 8003, 2000);
 
             if (!server.Start())
             {

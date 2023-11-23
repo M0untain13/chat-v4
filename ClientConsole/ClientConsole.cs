@@ -10,7 +10,7 @@ namespace ClientConsole
 
         private static void Main()
         {
-            var client = new Client(Callback, 8000, 8001);
+            var client = new Client(Callback, 8002, 8003);
 
             if (!client.Start())
             {
