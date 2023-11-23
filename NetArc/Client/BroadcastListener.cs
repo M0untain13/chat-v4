@@ -17,7 +17,6 @@ internal class BroadcastListener
     {
         _client = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         _ip = new IPEndPoint(IPAddress.Any, port);
-        _client.Bind(_ip);
     }
 
     /// <summary>
@@ -27,7 +26,22 @@ internal class BroadcastListener
     public string GetServerIp()
     {
         var buffer = new byte[1024];
+        while (true)
+        {
+            try
+            {
+                _client.Bind(_ip);
+                break;
+            }
+            catch 
+            {
+                Thread.Sleep(1000);
+            }
+            
+        }
+        
         var recv = _client.ReceiveFrom(buffer, ref _ip);
+        _client.Close();
         return Encoding.ASCII.GetString(buffer, 0, recv);
     }
 

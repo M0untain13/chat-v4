@@ -88,13 +88,20 @@ internal class Listener
                     isUnique = false;
                 }
                 var result = isUnique ? "accept" : "denied";
+
+                if (isUnique)
+                {
+                    var a = _clients.Where(client => client.Item2.Id == id).ToArray();
+                    a[0].Item1 = message.text;
+                }
+
                 (string, Connection)? connection = null;
                 foreach (var client in _clients.Where(client => id == client.Item2.Id))
                 {
                     connection = client; 
                     break;
                 }
-                connection?.Item2.Send(new WebMessage(sender: "server", type: "auth", name: "", text: result));
+                connection?.Item2.Send(new WebMessage(sender: "server", type: "auth", name: message.text, text: result));
                 break;
         }
 
