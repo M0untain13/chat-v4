@@ -17,10 +17,11 @@ internal class Listener
     {
         _callback = callback;
 
-        var ipHost = Dns.GetHostEntry("localhost");
-        var ipAddr = ipHost.AddressList[0];
-        _iep = new IPEndPoint(ipAddr, port);
-        _server = new Socket(ipAddr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+        var myHost = System.Net.Dns.GetHostName();
+        var myIP = System.Net.Dns.GetHostByName(myHost).AddressList[0].ToString();
+
+        _iep = new IPEndPoint(IPAddress.Parse(myIP), port);
+        _server = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
     }
 
     /// <summary>

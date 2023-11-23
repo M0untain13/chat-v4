@@ -20,7 +20,7 @@ internal class Connector
         _receiver = null!;
         _callback = callback;
         _port = port;
-        _client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        _client = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
     }
 
     /// <summary>

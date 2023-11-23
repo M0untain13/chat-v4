@@ -9,7 +9,7 @@ namespace ServerConsole
 
         private static void Main()
         {
-            var server = new Server(Callback, 8002, 8003, 2000);
+            var server = new Server(Callback, 9001, 9002, 2000);
 
             if (!server.Start())
             {

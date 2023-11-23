@@ -22,7 +22,10 @@ internal class Broadcaster
         
         _broadcastTimeout = broadcastTimeout;
 
-        _buffer = Encoding.ASCII.GetBytes(Dns.GetHostName());
+        var myHost = System.Net.Dns.GetHostName();
+        var myIP = System.Net.Dns.GetHostByName(myHost).AddressList[0].ToString();
+
+        _buffer = Encoding.ASCII.GetBytes(myIP);
     }
 
     /// <summary>
