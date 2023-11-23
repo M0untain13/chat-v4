@@ -32,6 +32,7 @@ namespace ServerConsole
                             if (text == string.Empty)
                                 text = "Без сообщения.";
                             server.Send(new WebMessage("server", "exit", "", text));
+                            server.Stop();
                             break;
                         default:
                             Console.WriteLine("Введена неизвестная команда...");

@@ -10,48 +10,55 @@ namespace NetArc.Server;
 /// </summary>
 internal class Broadcaster
 {
+    private Socket UPDServertSocket;
+    private readonly int _broadcastTimeout = 2000;
+    private IPEndPoint _endPoint;
+
     /// <summary>
     /// Создать вещатель
     /// </summary>
     /// <param name="port"> Порт для вещания </param>
     /// <param name="broadcastTimeout"> Периодичность отправления вещаний </param>
-    
-    
-    //UdpClient udpServer = new UdpClient(SERVERUDPPORT);
-
-
-    //static List<IPEndPoint> Clients = new List<IPEndPoint>(); // Список "подключенных" клиентов
-    private static int SERVERUDPPORT = 8000;
-    private Socket UPDServertSocket;
-    private const int broadcastTimeout = 2000;
     public Broadcaster(int port, int broadcastTimeout)
     {
-        try
-        {
-            UPDServertSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            UPDServertSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
-
-            IPEndPoint endPoint = new IPEndPoint(IPAddress.Broadcast, SERVERUDPPORT);
-            UPDServertSocket.Bind(endPoint);
-            //Timer broadcastTimer = new Timer(BroadcastIP, null, 0, broadcastTimeout);
-        }
-        catch (Exception ex) { throw new NotImplementedException(); };
+        UPDServertSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        UPDServertSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
+        _endPoint = new IPEndPoint(IPAddress.Broadcast, port);
+        
+        _broadcastTimeout = broadcastTimeout;
+        UPDServertSocket.Bind(_endPoint);
     }
 
 
+
+    private bool _isStart;
+    private readonly byte[] buffer = new byte[1024];
     /// <summary>
     /// Запустить вещания IP сервера с определённой периодичностью
     /// </summary>
     public bool Start()
     {
-        throw new NotImplementedException();
+        if (_isStart) { return false; }
+        _isStart = true;
+        Task.Run(() =>
+        {
+            while (_isStart)
+            {
+                UPDServertSocket.SendTo(buffer, _endPoint);
+                Thread.Sleep(_broadcastTimeout);
+            }
+        });
+        return true;
     }
+
 
     /// <summary>
     /// Остановить вещания
     /// </summary>
     public bool Stop()
     {
-        throw new NotImplementedException();
+        if (!_isStart) { return false; }
+        _isStart = false;
+        return true;
     }
 }
