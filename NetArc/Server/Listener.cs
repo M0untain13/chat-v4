@@ -10,20 +10,6 @@ namespace NetArc.Server;
 /// </summary>
 internal class Listener
 {
-    private readonly List<(string, Connection, int)> _clients = new(); // Список "подключенных" клиентов
-    private Action<string> _callback;
-    private Socket _server;
-    private IPEndPoint _endPoint;
-
-    private int _nextId = 0;
-    private int NextId
-    {
-        get
-        {
-            return _nextId++;
-        }
-    }
-
     /// <summary>
     /// Создать прослушку
     /// </summary>
@@ -32,31 +18,30 @@ internal class Listener
     public Listener(Action<string> callback, int port)
     {
         _server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        _endPoint = new IPEndPoint(IPAddress.Any, port);
+        var endPoint = new IPEndPoint(IPAddress.Any, port);
         _callback = callback;
-        _server.Bind(_endPoint);
+        _server.Bind(endPoint);
     }
-
-
-    private bool _isStart;
-    private void Callback(WebMessage msg, int id) => Send(msg, id);
-
 
     /// <summary>
     /// Начать прослушку, для входящих соединений создать ConnectionTcp, запустить и добавить в массив соединений
     /// </summary>
     public bool Start()
     {
-        if (_isStart) { return false; }
+        if (_isStart) 
+            return false;
+
         _isStart = true;
         Task.Run(() => {
             while(_isStart)
             {
-                Socket client = _server.Accept();
-                // TODO: id закинуть в connection и переделать Callback
-                if (client != null) { _clients.Add(("anon", new Connection(client, Callback), NextId)); }
+                var client = _server.Accept();
+                var con = new Connection(client, Callback, NextId);
+                _clients.Add(("anon", con));
+                con.Start();
             }
         });
+
         return true;
     }
 
@@ -65,7 +50,9 @@ internal class Listener
     /// </summary>
     public bool Stop()
     {
-        if (!_isStart) { return false; }
+        if (!_isStart) 
+            return false;
+
         _isStart = false;
         return true;
     }
@@ -76,7 +63,11 @@ internal class Listener
     /// <param name="message"> Текст сообщения </param>
     public bool Send(WebMessage message, int id = -1)
     {
-        if (message.sender != "server" && id < 0) { return false; }
+        if (message.sender != "server" && id < 0)
+            return false;
+
+        _callback($"Пришло сообщение: {message.sender}, {message.type}, {message.name}, {message.text}.");
+
         switch (message)
         {
             case { sender: "server" } or { sender: "client", type: "message" }:
@@ -85,22 +76,35 @@ internal class Listener
                     client.Item2.Send(message);
                 }
                 break;
+
             case { sender: "client", type: "auth"}:
-                bool isUnique = true;
-                foreach (var client in _clients)
+                var isUnique = true;
+                foreach (var client in _clients.Where(client => client.Item1 == message.text))
                 {
-                    if (client.Item1 == message.text) { isUnique = false; }
+                    isUnique = false;
                 }
-                string result = isUnique ? "accept" : "denied";
-                (string, Connection, int)? connection = null;
-                foreach (var client in _clients)
+                var result = isUnique ? "accept" : "denied";
+                (string, Connection)? connection = null;
+                foreach (var client in _clients.Where(client => id == client.Item2.Id))
                 {
-                    if (id == client.Item3) { connection = client; break; }
+                    connection = client; 
+                    break;
                 }
-                if (connection != null) { 
-                    (((string, Connection, int))(connection)).Item2.Send(new WebMessage(sender: "server", type: "auth", name: "", text: result)); }
+                connection?.Item2.Send(new WebMessage(sender: "server", type: "auth", name: "", text: result));
                 break;
         }
+
         return true;
     }
+
+    private void Callback(WebMessage msg, int id) => Send(msg, id);
+
+    private readonly List<(string, Connection)> _clients = new();
+    private readonly Action<string> _callback;
+    private readonly Socket _server;
+
+    private int _nextId = 0;
+    private int NextId => _nextId++;
+
+    private bool _isStart;
 }

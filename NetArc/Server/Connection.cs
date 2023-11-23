@@ -10,16 +10,20 @@ namespace NetArc.Server;
 /// </summary>
 internal class Connection
 {
+    public int Id { get; }
+
     /// <summary>
     /// Создать соединение
     /// </summary>
     /// <param name="client"> Сокет клиента </param>
     /// <param name="callback"> Метод для обработки сообщений клиента </param>
-    public Connection(Socket client, Action<WebMessage> callback)
+    /// <param name="id"></param>
+    public Connection(Socket client, Action<WebMessage, int> callback, int id)
     {
         _client = client;
         _callback = callback;
         _parser = new Parser();
+        Id = id;
     }
 
     /// <summary>
@@ -38,7 +42,7 @@ internal class Connection
             {
                 var buffer = new byte[1024];
                 _client.Receive(buffer);
-                _callback(_parser.ParseMessage(Encoding.ASCII.GetString(buffer)));
+                _callback(_parser.ParseMessage(Encoding.ASCII.GetString(buffer)), Id);
             }
         });
 
@@ -83,7 +87,7 @@ internal class Connection
     private Task _receiver = new(() => { });
 
     private readonly Socket _client;
-    private readonly Action<WebMessage> _callback;
+    private readonly Action<WebMessage, int> _callback;
     private readonly Parser _parser;
 
     private bool _isStart;
