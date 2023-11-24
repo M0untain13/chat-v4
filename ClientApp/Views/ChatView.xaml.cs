@@ -12,6 +12,10 @@ namespace ClientApp.Views
     {
         public ChatView() => InitializeComponent();
 
-        private void HelpButtonClick(object sender, RoutedEventArgs e) => MessageBox.Show("Бог поможет...", "No way!");
+        private void HelpButtonClick(object sender, System.Windows.RoutedEventArgs e) => MessageBox.Show(_text, _caption);
+
+        private const string
+            _text = "Введите в поле сообщение и нажмите на кнопку 'отправить', это сообщение отправится всем пользователям в чате.",
+            _caption = "Помощь";
     }
 }

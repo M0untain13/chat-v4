@@ -10,6 +10,10 @@ namespace ClientApp.Views
     {
         public StartView() => InitializeComponent();
 
-        private void HelpButtonClick(object sender, System.Windows.RoutedEventArgs e) => MessageBox.Show("Бог поможет...", "No way!");
+        private void HelpButtonClick(object sender, System.Windows.RoutedEventArgs e) => MessageBox.Show(_text, _caption);
+
+        private const string
+            _text = "Введите своё имя в поле и нажмите кнопку 'отправить'. Возможно имя будет занято, тогда авторизация не получится, просто введите другое имя.",
+            _caption = "Помощь";
     }
 }
