@@ -42,7 +42,7 @@ internal class BroadcastListener
         
         var recv = _client.ReceiveFrom(buffer, ref _ip);
         _client.Close();
-        return Encoding.ASCII.GetString(buffer, 0, recv);
+        return Encoding.UTF8.GetString(buffer, 0, recv);
     }
 
     private EndPoint _ip;

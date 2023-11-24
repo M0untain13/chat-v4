@@ -42,7 +42,7 @@ internal class Connector
                     var size = _client.Receive(buffer);
                     if (size > 0)
                     {
-                        _callback(parser.ParseMessage(Encoding.ASCII.GetString(buffer, 0, size)));
+                        _callback(parser.ParseMessage(Encoding.UTF8.GetString(buffer, 0, size)));
                     }
                 }
                 catch (SocketException ex)
@@ -83,7 +83,7 @@ internal class Connector
 
         Task.Run(() =>
         {
-            _client.Send(Encoding.ASCII.GetBytes(message));
+            _client.Send(Encoding.UTF8.GetBytes(message));
         });
 
         return true;

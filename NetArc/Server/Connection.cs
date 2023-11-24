@@ -40,7 +40,7 @@ internal class Connection
             {
                 var buffer = new byte[1024];
                 _client.Receive(buffer);
-                _callback(_parser.ParseMessage(Encoding.ASCII.GetString(buffer)), Id);
+                _callback(_parser.ParseMessage(Encoding.UTF8.GetString(buffer)), Id);
             }
         });
 
@@ -50,7 +50,6 @@ internal class Connection
     /// <summary>
     /// Остановить работу с клиентом
     /// </summary>
-    /// <exception cref="NotImplementedException"></exception>
     public bool Stop()
     {
         if (!_isStart)
@@ -76,7 +75,7 @@ internal class Connection
 
         Task.Run(() =>
         {
-            _client.Send(Encoding.ASCII.GetBytes(_parser.CreateMessage(message)));
+            _client.Send(Encoding.UTF8.GetBytes(_parser.CreateMessage(message)));
         });
 
         return true;

@@ -25,7 +25,7 @@ internal class Broadcaster
         var myHost = System.Net.Dns.GetHostName();
         var myIP = System.Net.Dns.GetHostByName(myHost).AddressList[0].ToString();
 
-        _buffer = Encoding.ASCII.GetBytes(myIP);
+        _buffer = Encoding.UTF8.GetBytes(myIP);
     }
 
     /// <summary>
