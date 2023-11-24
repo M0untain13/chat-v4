@@ -1,5 +1,6 @@
 ﻿using NetArc;
 using NetArc.Client;
+using NetArc.Server;
 
 namespace ClientConsole
 {
@@ -8,11 +9,34 @@ namespace ClientConsole
         private static string _name = "anon";
         private static bool _isStart;
 
+        private static Client _client;
+
+        private static readonly Dictionary<string, Action<string[]>> _commands = new()
+        {
+            {"exit", message => {
+                _isStart = false;
+                _client.Send(new WebMessage("client", "exit", _name, ""));
+            }},
+            {"message", message => {
+                var msgList = message.ToList();
+                msgList.RemoveAt(0);
+                _client.Send(new WebMessage("client", "message", _name, string.Join(" ", msgList)));
+            }},
+            {"auth", message => {
+                _client.Send(new WebMessage("client", "auth", _name, message[1]));
+            }},
+            {"help", _ => {
+                Console.WriteLine($"Существующие команды: {string.Join(", ", _commandsNames)}");
+            }}
+        };
+
+        private static readonly string[] _commandsNames = _commands.Keys.ToArray();
+
         private static void Main()
         {
-            var client = new Client(Callback, 9001, 9002);
+            _client = new Client(Callback, 9001, 9002);
 
-            if (!client.Start())
+            if (!_client.Start())
             {
                 Console.WriteLine("Клиент не смог подключиться к серверу...");
             }
@@ -23,22 +47,13 @@ namespace ClientConsole
                 while (_isStart)
                 {
                     var message = (Console.ReadLine()!).Split();
-                    switch (message[0])
+                    if (_commandsNames.Contains(message[0]))
                     {
-                        case "exit":
-                            _isStart = false;
-                            client.Send(new WebMessage("client", "exit", _name, ""));
-                            break;
-                        case "auth":
-                            client.Send(new WebMessage("client", "auth", _name, message[1]));
-                            break;
-                        case "message":
-                            message[0] = "";
-                            client.Send(new WebMessage("client", "message", _name, string.Join(" ", message)));
-                            break;
-                        default:
-                            Console.WriteLine("Введена неизвестная команда...");
-                        break;
+                        _commands[message[0]](message);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Введена неизвестная команда...");
                     }
                 }
             }
@@ -46,20 +61,32 @@ namespace ClientConsole
 
         private static void Callback(WebMessage message)
         {
+            var msgText = "";
             switch (message)
             {
                 case { sender: "server", type: "auth", text: "accept" }:
-                    Console.WriteLine("Авторизация успешна!");
+                    msgText = "Авторизация успешна!";
+                    _name = message.name;
+                    break;
+                case { sender: "server", type: "auth", text: "denied" }:
+                    msgText = "Авторизация отклонена...";
                     _name = message.name;
                     break;
                 case { sender: "server", type: "exit" }:
-                    Console.WriteLine($"Сервер завершил свою работу. {message.text}.");
+                    msgText = $"Сервер завершил свою работу...";
                     _isStart = false;
                     break;
                 case { sender: "client", type: "message" }:
-                    Console.WriteLine($"{message.name}: {message.text}");
+                    msgText = $"{message.name}: {message.text}";
                     break;
+                case { sender: "server", type: "message" }:
+                    msgText = $"Server: {message.text}";
+                    break;
+                default:
+                    return;
             }
+
+            Console.WriteLine(msgText);
         }
     }
 }

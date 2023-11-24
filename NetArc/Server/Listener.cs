@@ -70,11 +70,14 @@ internal class Listener
         if (message.sender != "server" && id < 0)
             return false;
 
-        _callback($"Пришло сообщение: {message.sender}, {message.type}, {message.name}, {message.text}.");
+        if (message.sender == "client")
+        {
+            _callback($"Пришло сообщение: {message.name}, {message.type}, {message.text}.");
+        }
 
         switch (message)
         {
-            case { sender: "server" } or { sender: "client", type: "message" }:
+            case { sender: "server" }:
                 foreach (var client in _clients)
                 {
                     client.Item2.Send(message);
@@ -83,16 +86,29 @@ internal class Listener
 
             case { sender: "client", type: "auth"}:
                 var isUnique = true;
-                foreach (var client in _clients.Where(client => client.Item1 == message.text))
+
+                var deniedNames = new string[]
+                {
+                    "anon", "Anon", "server", "Server"
+                };
+                if (deniedNames.Contains(message.text) 
+                    || _clients.Any(client => client.Item1 == message.text))
                 {
                     isUnique = false;
                 }
+
                 var result = isUnique ? "accept" : "denied";
 
                 if (isUnique)
                 {
-                    var a = _clients.Where(client => client.Item2.Id == id).ToArray();
-                    a[0].Item1 = message.text;
+                    for (var i = 0; i < _clients.Count; i++)
+                    {
+                        if (_clients[i].Item2.Id == id)
+                        {
+                            _clients[i] = (message.text, _clients[i].Item2);
+                            break;
+                        }
+                    }
                 }
 
                 (string, Connection)? connection = null;
@@ -103,6 +119,27 @@ internal class Listener
                 }
                 connection?.Item2.Send(new WebMessage(sender: "server", type: "auth", name: message.text, text: result));
                 break;
+
+            case { sender: "client", type: "message" }:
+                var isAcceptMessage = true;
+                for (var i = 0; i < _clients.Count; i++)
+                {
+                    if (_clients[i].Item2.Id == id && _clients[i].Item1 == "anon")
+                    {
+                        isAcceptMessage = false;
+                        break;
+                    }
+                }
+
+                if (isAcceptMessage)
+                {
+                    foreach (var client in _clients)
+                    {
+                        if(client.Item1 != "anon")
+                            client.Item2.Send(message);
+                    }
+                }
+                break;
         }
 
         return true;
@@ -110,6 +147,7 @@ internal class Listener
 
     private void Callback(WebMessage msg, int id) => Send(msg, id);
 
+    // TODO: После отсоединения нужно удалить клиента. Наверное в Send можно это отработать
     private readonly List<(string, Connection)> _clients = new();
     private readonly Action<string> _callback;
     private readonly Socket _server;

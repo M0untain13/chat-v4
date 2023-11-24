@@ -37,10 +37,18 @@ internal class Connector
             while (_isStart)
             {
                 var buffer = new byte[1024];
-                var size = _client.Receive(buffer);
-                if (size > 0)
+                try
                 {
-                    _callback(parser.ParseMessage(Encoding.ASCII.GetString(buffer, 0, size)));
+                    var size = _client.Receive(buffer);
+                    if (size > 0)
+                    {
+                        _callback(parser.ParseMessage(Encoding.ASCII.GetString(buffer, 0, size)));
+                    }
+                }
+                catch (SocketException ex)
+                {
+                    _isStart = false;
+                    _client.Close();
                 }
             }
         });
