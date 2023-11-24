@@ -76,32 +76,14 @@ namespace ClientCore.ViewModels
                     {
                         StatusMessage = "Отправка сообщения...";
 
-                        /* TODO: вернуть
-                        StatusMessage = _client.Send(
-                            $"{Tag.MESSAGE}{Tag.Wrap(_name, Tag.NAME_S, Tag.NAME_E)}{Tag.Wrap(Text, Tag.TEXT_S, Tag.TEXT_E)}")
+                        StatusMessage = _client.Send(new WebMessage("client", "message", _name, Text))
                             ? "Сообщение отправлено."
                             : "Ошибка: Сообщение не отправилось.";
-                        */
-
-                        // TODO: убрать
-                        Thread.Sleep(1000);
-                        AsyncDispatcher.ExecuteOnMainThreadAsync(() =>
-                        {
-                            _Callback(new WebMessage("client", "message", _name, Text));
-                            Text = "";
-                            //Messages.Add(new Message { Name = _name, Text = Text });
-                            StatusMessage = "Сообщение отправлено.";
-                        });
+                        
+                        Text = "";
                     });
                 }
             );
-
-            #endregion
-
-            #region Временная заглушка
-
-            Messages.Add(new Message("Валера", "Го бухать"));
-            Messages.Add(new Message("Димон", "Го)))"));
 
             #endregion
 
@@ -134,15 +116,27 @@ namespace ClientCore.ViewModels
 
         private void _Callback(WebMessage webMessage)
         {
-            if (webMessage.type == "message")
+            AsyncDispatcher.ExecuteOnMainThreadAsync(() =>
             {
-                var message = new Message(webMessage.name, webMessage.text);
-
-                if (message.Name == _name)
-                    message.Name = "Вы";
-
-                Messages.Add(message);
-            }
+                switch (webMessage)
+                {
+                    case { sender: "server", type: "exit" }:
+                        Messages.Add(new Message("Серверное сообщение", "Сервер отключился..."));
+                        break;
+                    case { sender: "client", type: "message" }:
+                        var message = new Message(webMessage.name, webMessage.text);
+                        if (message.Name == _name)
+                            message.Name = "Вы";
+                        Messages.Add(message);
+                        break;
+                    case { sender: "server", type: "message" }:
+                        Messages.Add(new Message("Серверное сообщение", webMessage.text));
+                        break;
+                    default:
+                        return;
+                }
+                StatusMessage = "Пришло сообщение.";
+            });
         }
     }
 }

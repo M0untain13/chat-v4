@@ -18,7 +18,6 @@ internal class Parser
 
 	public WebMessage ParseMessage(string message)
 	{
-		// TODO: сделаем вид, что на вход всегда подаются правильные данные без ошибок
 		var sender = _ParseTag(message, "<sender>", "</sender>");
 		var type = _ParseTag(message, "<type>", "</type>");
         var name = _ParseTag(message, "<name>", "</name>");

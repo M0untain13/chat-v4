@@ -27,17 +27,6 @@ namespace ClientCore.ViewModels
 
 		#endregion
 
-		#region Поле загрузки
-
-		private string _loadMessage = "Подождите, идёт подключение к серверу...";
-		public string LoadMessage
-		{
-			get => _loadMessage;
-			set => SetProperty(ref _loadMessage, value);
-		}
-
-		#endregion
-
 		#region Сообщение статус-бара
 
 		private ushort _timer = 0;
@@ -93,14 +82,10 @@ namespace ClientCore.ViewModels
 							StatusMessage = "Введено пустое имя.";
 						});
 
-					// TODO: вернуть _client.Send($"{Tag.AUTH}{Name}");
-					// TODO: убрать строку внизу
 					return Task.Run(() =>
 					{
-						_Callback(Name is "Валера" or "Димон"
-							? new WebMessage("server", "auth", Name, "denied")
-							: new WebMessage("server", "auth", Name, "accept"));
-					});
+                        _client.Send(new WebMessage("client", "auth", "anon", Name));
+                    });
 				}
 			);
 
@@ -110,13 +95,10 @@ namespace ClientCore.ViewModels
 
 			Task.Run(() =>
 			{
-				//TODO: убрать эту строку
 				StatusMessage = "Подключение к серверу...";
-				Thread.Sleep(3000);
-
 				do
 				{
-					_client = _clientService.GetClient(_Callback, 8000, 8001);
+					_client = _clientService.GetClient(_Callback, 9001, 9002);
                     _isStart = _client.Start();
 				} while (!_isStart);
 
@@ -147,20 +129,22 @@ namespace ClientCore.ViewModels
 		private bool _isStart;
 
 		private void _Callback(WebMessage message)
-		{
-			if (message.sender == "server" && message.type == "auth" && message.name == Name)
-			{
-				if(message.text == "accept")
-				{
-					StatusMessage = "Авторизация одобрена!";
-					Thread.Sleep(1000);
-					_navigationService.Navigate<ChatViewModel, (IClientWrapper, string)>((_client, Name));
-				}
-				else
-				{
-					StatusMessage = "Авторизация отклонена.";
-				}
-			}
+        {
+            AsyncDispatcher.ExecuteOnMainThreadAsync(() =>
+            {
+                if (message.sender == "server" && message.type == "auth" && message.name == Name)
+                {
+                    if (message.text == "accept")
+                    {
+                        StatusMessage = "Авторизация одобрена!";
+                        _navigationService.Navigate<ChatViewModel, (IClientWrapper, string)>((_client, Name));
+                    }
+                    else
+                    {
+                        StatusMessage = "Авторизация отклонена.";
+                    }
+                }
+            });
 		}
 	}
 }
