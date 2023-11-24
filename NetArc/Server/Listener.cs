@@ -70,7 +70,7 @@ internal class Listener
         if (message.sender != "server" && id < 0)
             return false;
 
-        if (message.sender == "client")
+        if (message.sender == "client" && message.type != "error")
         {
             _callback($"Пришло сообщение: {message.name}, {message.type}, {message.text}.");
         }
@@ -79,41 +79,33 @@ internal class Listener
         {
             case { sender: "server" }:
                 foreach (var client in _clients)
-                {
                     client.Item2.Send(message);
-                }
                 break;
 
             case { sender: "client", type: "auth"}:
                 var isUnique = true;
-
-                var deniedNames = new string[]
-                {
+                var deniedNames = new string[] {
                     "anon", "Anon", "server", "Server"
                 };
                 if (deniedNames.Contains(message.text) 
-                    || _clients.Any(client => client.Item1 == message.text))
+                    || _clients.Any(client => client.Item1 == message.text)) 
                 {
                     isUnique = false;
                 }
-
                 var result = isUnique ? "accept" : "denied";
-
-                if (isUnique)
-                {
+                if (isUnique) {
                     for (var i = 0; i < _clients.Count; i++)
-                    {
-                        if (_clients[i].Item2.Id == id)
-                        {
+                        if (_clients[i].Item2.Id == id) {
                             _clients[i] = (message.text, _clients[i].Item2);
+                            _callback("Клиент авторизовался!");
                             break;
                         }
-                    }
                 }
-
+                else
+                    _callback("Клиент не смог авторизоваться...");
+                    
                 (string, Connection)? connection = null;
-                foreach (var client in _clients.Where(client => id == client.Item2.Id))
-                {
+                foreach (var client in _clients.Where(client => id == client.Item2.Id)) {
                     connection = client; 
                     break;
                 }
@@ -123,22 +115,32 @@ internal class Listener
             case { sender: "client", type: "message" }:
                 var isAcceptMessage = true;
                 for (var i = 0; i < _clients.Count; i++)
-                {
-                    if (_clients[i].Item2.Id == id && _clients[i].Item1 == "anon")
-                    {
+                    if (_clients[i].Item2.Id == id && _clients[i].Item1 == "anon") {
                         isAcceptMessage = false;
                         break;
                     }
-                }
-
                 if (isAcceptMessage)
-                {
                     foreach (var client in _clients)
-                    {
                         if(client.Item1 != "anon")
                             client.Item2.Send(message);
+                break;
+
+            case { sender: "client", type: "exit" }:
+                for (var i = 0; i < _clients.Count; i++)
+                    if (_clients[i].Item2.Id == id) {
+                        _clients.RemoveAt(i);
+                        break;
                     }
-                }
+                break;
+
+            case { sender: "client", type: "error" }:
+                for (var i = 0; i < _clients.Count; i++)
+                    if (_clients[i].Item2.Id == id)
+                    {
+                        _clients.RemoveAt(i);
+                        break;
+                    }
+                _callback("Клиент разорвал соединение...");
                 break;
         }
 
@@ -147,7 +149,7 @@ internal class Listener
 
     private void Callback(WebMessage msg, int id) => Send(msg, id);
 
-    // TODO: После отсоединения нужно удалить клиента. Наверное в Send можно это отработать
+    // TODO: Мне кажется нужно добавить мьютекс для доступа к списку клиентов
     private readonly List<(string, Connection)> _clients = new();
     private readonly Action<string> _callback;
     private readonly Socket _server;

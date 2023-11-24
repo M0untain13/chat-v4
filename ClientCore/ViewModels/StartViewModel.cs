@@ -124,7 +124,7 @@ namespace ClientCore.ViewModels
 			#endregion
 		}
 
-		private IClientWrapper _client = null!;
+        private IClientWrapper _client = null!;
 
 		private bool _isStart;
 

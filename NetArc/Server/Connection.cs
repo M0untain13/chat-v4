@@ -1,4 +1,5 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.Net.Sockets;
 using System.Text;
 
 namespace NetArc.Server;
@@ -38,9 +39,18 @@ internal class Connection
         {
             while (_isStart)
             {
-                var buffer = new byte[1024];
-                _client.Receive(buffer);
-                _callback(_parser.ParseMessage(Encoding.UTF8.GetString(buffer)), Id);
+                try
+                {
+                    var buffer = new byte[1024];
+                    _client.Receive(buffer);
+                    _callback(_parser.ParseMessage(Encoding.UTF8.GetString(buffer)), Id);
+                }
+                catch (SocketException ex)
+                {
+                    _callback(new WebMessage("client", "error", Id.ToString(), ex.Message), Id);
+                    _isStart = false;
+                    _client.Close();
+                }
             }
         });
 
@@ -56,7 +66,6 @@ internal class Connection
             return false;
 
         _isStart = false;
-        // TODO: Надо подумать, о том, как работать с сокетом
         _client.Close();
 
         _receiver.Wait();
