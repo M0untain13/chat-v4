@@ -15,8 +15,8 @@ internal class BroadcastListener
     /// <param name="port"> Порт для прослушки вещаний </param>
     public BroadcastListener(int port)
     {
-        _client = new Socket(AddressFamily.InterNetworkV6, SocketType.Dgram, ProtocolType.Udp);
-        _ipep = new IPEndPoint(IPAddress.IPv6Any, port);
+        _client = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        _ipep = new IPEndPoint(IPAddress.Any, port);
     }
 
     /// <summary>

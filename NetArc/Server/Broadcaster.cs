@@ -16,9 +16,9 @@ internal class Broadcaster
     /// <param name="broadcastTimeout"> Периодичность отправления вещаний </param>
     public Broadcaster(int port, int broadcastTimeout)
     {
-        _server = new Socket(AddressFamily.InterNetworkV6, SocketType.Dgram, ProtocolType.Udp);
+        _server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         _server.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
-        _endPoint = new IPEndPoint(IPAddress.IPv6Loopback, port);
+        _endPoint = new IPEndPoint(IPAddress.Broadcast, port);
         
         _broadcastTimeout = broadcastTimeout;
 
