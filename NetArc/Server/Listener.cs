@@ -40,8 +40,11 @@ internal class Listener
             while(_isStart)
             {
                 var client = _server.Accept();
+                _callback("Подключился новый клиент!");
                 var con = new Connection(client, Callback, NextId);
-                _clients.Add(("anon", con));
+
+                lock (_clients)
+                    _clients.Add(("anon", con));
                 con.Start();
             }
         });
@@ -75,82 +78,83 @@ internal class Listener
         {
             _callback($"Пришло сообщение: {message.name}, {message.type}, {message.text}.");
         }
+        
+        lock(_clients)
+            switch (message)
+            {
+                case { sender: "server" }:
+                    foreach (var client in _clients)
+                        client.Item2.Send(message);
+                    break;
 
-        switch (message)
-        {
-            case { sender: "server" }:
-                foreach (var client in _clients)
-                    client.Item2.Send(message);
-                break;
+                case { sender: "client", type: "auth"}:
+                    var isUnique = true;
+                    var deniedNames = new string[] {
+                        "anon", "Anon", "server", "Server"
+                    };
+                    if (deniedNames.Contains(message.text) 
+                        || _clients.Any(client => client.Item1 == message.text)) 
+                    {
+                        isUnique = false;
+                    }
+                    var result = isUnique ? "accept" : "denied";
+                    if (isUnique) {
+                        for (var i = 0; i < _clients.Count; i++)
+                            if (_clients[i].Item2.Id == id) {
+                                _clients[i] = (message.text, _clients[i].Item2);
+                                _callback("Клиент авторизовался!");
+                                Send(new WebMessage("server", "message", "", $"Пользователь {message.text} подключился к чату!"));
+                                break;
+                            }
+                    }
+                    else
+                        _callback("Клиент не смог авторизоваться...");
+                    
+                    (string, Connection)? connection = null;
+                    foreach (var client in _clients.Where(client => id == client.Item2.Id)) {
+                        connection = client; 
+                        break;
+                    }
+                    connection?.Item2.Send(new WebMessage(sender: "server", type: "auth", name: message.text, text: result));
+                    break;
 
-            case { sender: "client", type: "auth"}:
-                var isUnique = true;
-                var deniedNames = new string[] {
-                    "anon", "Anon", "server", "Server"
-                };
-                if (deniedNames.Contains(message.text) 
-                    || _clients.Any(client => client.Item1 == message.text)) 
-                {
-                    isUnique = false;
-                }
-                var result = isUnique ? "accept" : "denied";
-                if (isUnique) {
+                case { sender: "client", type: "message" }:
+                    var isAcceptMessage = true;
                     for (var i = 0; i < _clients.Count; i++)
-                        if (_clients[i].Item2.Id == id) {
-                            _clients[i] = (message.text, _clients[i].Item2);
-                            _callback("Клиент авторизовался!");
+                        if (_clients[i].Item2.Id == id && _clients[i].Item1 == "anon") {
+                            isAcceptMessage = false;
                             break;
                         }
-                }
-                else
-                    _callback("Клиент не смог авторизоваться...");
-                    
-                (string, Connection)? connection = null;
-                foreach (var client in _clients.Where(client => id == client.Item2.Id)) {
-                    connection = client; 
+                    if (isAcceptMessage)
+                        foreach (var client in _clients)
+                            if(client.Item1 != "anon")
+                                client.Item2.Send(message);
                     break;
-                }
-                connection?.Item2.Send(new WebMessage(sender: "server", type: "auth", name: message.text, text: result));
-                break;
 
-            case { sender: "client", type: "message" }:
-                var isAcceptMessage = true;
-                for (var i = 0; i < _clients.Count; i++)
-                    if (_clients[i].Item2.Id == id && _clients[i].Item1 == "anon") {
-                        isAcceptMessage = false;
-                        break;
-                    }
-                if (isAcceptMessage)
-                    foreach (var client in _clients)
-                        if(client.Item1 != "anon")
-                            client.Item2.Send(message);
-                break;
+                case { sender: "client", type: "exit" }:
+                    for (var i = 0; i < _clients.Count; i++)
+                        if (_clients[i].Item2.Id == id) {
+                            _clients.RemoveAt(i);
+                            break;
+                        }
+                    break;
 
-            case { sender: "client", type: "exit" }:
-                for (var i = 0; i < _clients.Count; i++)
-                    if (_clients[i].Item2.Id == id) {
-                        _clients.RemoveAt(i);
-                        break;
-                    }
-                break;
-
-            case { sender: "client", type: "error" }:
-                for (var i = 0; i < _clients.Count; i++)
-                    if (_clients[i].Item2.Id == id)
-                    {
-                        _clients.RemoveAt(i);
-                        break;
-                    }
-                _callback("Клиент разорвал соединение...");
-                break;
-        }
+                case { sender: "client", type: "error" }:
+                    for (var i = 0; i < _clients.Count; i++)
+                        if (_clients[i].Item2.Id == id)
+                        {
+                            _clients.RemoveAt(i);
+                            break;
+                        }
+                    _callback("Клиент разорвал соединение...");
+                    break;
+            }
 
         return true;
     }
 
     private void Callback(WebMessage msg, int id) => Send(msg, id);
 
-    // TODO: Мне кажется нужно добавить мьютекс для доступа к списку клиентов
     private readonly List<(string, Connection)> _clients = new();
     private readonly Action<string> _callback;
     private readonly Socket _server;

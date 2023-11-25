@@ -135,8 +135,9 @@ namespace ClientCore.ViewModels
                     default:
                         return;
                 }
-                // TODO: При отправке сообщения в приложении не должно быть сообщения в статус-баре о том, что "сообщение пришло", а скорее "сообщение отправлено"
-                StatusMessage = "Пришло сообщение.";
+
+                if(webMessage.name != _name)
+                    StatusMessage = "Пришло сообщение.";
             });
         }
     }

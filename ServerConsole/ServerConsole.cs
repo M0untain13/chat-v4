@@ -6,7 +6,7 @@ namespace ServerConsole
     internal class ServerConsole
     {
         private static bool _isStart;
-        private static Server _server;
+        private static Server _server = null!;
 
         private static readonly Dictionary<string, Action<string[]>> _commands = new()
         {
