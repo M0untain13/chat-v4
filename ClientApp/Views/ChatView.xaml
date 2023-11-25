@@ -77,7 +77,8 @@
                      VirtualizingPanel.ScrollUnit="Pixel"
                      VirtualizingPanel.VirtualizationMode="Recycling"
                      VirtualizingPanel.IsVirtualizing="True"
-                     VirtualizingPanel.CacheLength="10">
+                     VirtualizingPanel.CacheLength="10"
+                     infstr:ListBoxBehavior.AutoScroll="True">
 				<!-- Стиль для того, чтобы элементы не выделялись синим цветом при наведении курсором -->
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
