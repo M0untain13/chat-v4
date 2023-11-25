@@ -32,7 +32,7 @@ namespace ServerConsole
 
         private static void Main()
         {
-            _server = new Server(Callback, 9001, 9002, 2000);
+            _server = new Server(Callback, 4899, 5650, 2000);
 
             if (!_server.Start())
             {
