@@ -119,7 +119,7 @@ namespace ClientCore.ViewModels
 			{
 				do
 				{
-					_client = _clientService.GetClient(_Callback, 4899, 5650);
+					_client = _clientService.GetClient(_Callback, 4899, 4899);
                     _isStart = _client.Start();
 				} while (!_isStart);
 
