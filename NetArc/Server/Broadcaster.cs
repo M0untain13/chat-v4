@@ -16,16 +16,17 @@ internal class Broadcaster
     /// <param name="broadcastTimeout"> Периодичность отправления вещаний </param>
     public Broadcaster(int port, int broadcastTimeout)
     {
-        _server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        _server = new Socket(AddressFamily.InterNetworkV6, SocketType.Dgram, ProtocolType.Udp);
         _server.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
-        _endPoint = new IPEndPoint(IPAddress.Broadcast, port);
+        _endPoint = new IPEndPoint(IPAddress.IPv6Loopback, port);
         
         _broadcastTimeout = broadcastTimeout;
 
-        var myHost = System.Net.Dns.GetHostName();
-        var myIP = System.Net.Dns.GetHostByName(myHost).AddressList[0].ToString();
+        var host = Dns.GetHostName();
+        var addrList = Dns.GetHostByName(host).AddressList;
+        var ip = addrList[2].ToString();
 
-        _buffer = Encoding.UTF8.GetBytes(myIP);
+        _buffer = Encoding.UTF8.GetBytes(ip);
     }
 
     /// <summary>

@@ -15,8 +15,8 @@ internal class BroadcastListener
     /// <param name="port"> Порт для прослушки вещаний </param>
     public BroadcastListener(int port)
     {
-        _client = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-        _ip = new IPEndPoint(IPAddress.Any, port);
+        _client = new Socket(AddressFamily.InterNetworkV6, SocketType.Dgram, ProtocolType.Udp);
+        _ipep = new IPEndPoint(IPAddress.IPv6Any, port);
     }
 
     /// <summary>
@@ -30,7 +30,7 @@ internal class BroadcastListener
         {
             try
             {
-                _client.Bind(_ip);
+                _client.Bind(_ipep);
                 break;
             }
             catch 
@@ -40,12 +40,12 @@ internal class BroadcastListener
             
         }
         
-        var recv = _client.ReceiveFrom(buffer, ref _ip);
+        var recv = _client.ReceiveFrom(buffer, ref _ipep);
         _client.Close();
         return Encoding.UTF8.GetString(buffer, 0, recv);
     }
 
-    private EndPoint _ip;
+    private EndPoint _ipep;
 
     private readonly Socket _client;
 }

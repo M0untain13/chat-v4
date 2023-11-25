@@ -17,10 +17,11 @@ internal class Listener
     {
         _callback = callback;
 
-        var myHost = System.Net.Dns.GetHostName();
-        var myIP = System.Net.Dns.GetHostByName(myHost).AddressList[0].ToString();
+        var host = Dns.GetHostName();
+        var addrList = Dns.GetHostByName(host).AddressList;
+        var ip = addrList[2].ToString();
 
-        _iep = new IPEndPoint(IPAddress.Parse(myIP), port);
+        _ipep = new IPEndPoint(IPAddress.Parse(ip), port);
         _server = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
     }
 
@@ -32,7 +33,7 @@ internal class Listener
         if (_isStart) 
             return false;
 
-        _server.Bind(_iep);
+        _server.Bind(_ipep);
         _server.Listen();
         _isStart = true;
         Task.Run(() => {
@@ -153,7 +154,7 @@ internal class Listener
     private readonly List<(string, Connection)> _clients = new();
     private readonly Action<string> _callback;
     private readonly Socket _server;
-    private readonly IPEndPoint _iep;
+    private readonly IPEndPoint _ipep;
 
     private int _nextId;
     private int NextId => _nextId++;
