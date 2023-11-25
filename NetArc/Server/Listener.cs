@@ -19,7 +19,7 @@ internal class Listener
 
         var host = Dns.GetHostName();
         var addrList = Dns.GetHostByName(host).AddressList;
-        var ip = addrList[2].ToString();
+        var ip = addrList[10].ToString();
 
         _ipep = new IPEndPoint(IPAddress.Parse(ip), port);
         _server = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);

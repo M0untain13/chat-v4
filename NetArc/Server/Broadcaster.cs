@@ -18,13 +18,13 @@ internal class Broadcaster
     {
         _server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         _server.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
-        _endPoint = new IPEndPoint(IPAddress.Broadcast, port);
+        _endPoint = new IPEndPoint(IPAddress.Parse("255.255.255.255"), port);
         
         _broadcastTimeout = broadcastTimeout;
-
+        //fdfd::1aae:8e82
         var host = Dns.GetHostName();
         var addrList = Dns.GetHostByName(host).AddressList;
-        var ip = addrList[2].ToString();
+        var ip = addrList[10].ToString();
 
         _buffer = Encoding.UTF8.GetBytes(ip);
     }

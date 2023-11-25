@@ -16,7 +16,7 @@ internal class BroadcastListener
     public BroadcastListener(int port)
     {
         _client = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-        _ipep = new IPEndPoint(IPAddress.Any, port);
+        _ipep = new IPEndPoint(IPAddress.Parse("0.0.0.0"), port);
     }
 
     /// <summary>
