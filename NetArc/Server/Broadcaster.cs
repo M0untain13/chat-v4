@@ -18,7 +18,7 @@ internal class Broadcaster
     {
         _server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
         _server.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
-        _endPoint = new IPEndPoint(IPAddress.Broadcast, port);
+        _endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
         
         _broadcastTimeout = broadcastTimeout;
 

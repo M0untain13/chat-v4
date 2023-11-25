@@ -40,7 +40,7 @@ namespace ClientCore.ViewModels
 				if (SetProperty(ref _statusMessage, value))
 				{
 					// Установка таймера для сброса сообщения в статус-баре
-					_timer = 3;
+					_timer = 7;
 				}
 			}
 		}
