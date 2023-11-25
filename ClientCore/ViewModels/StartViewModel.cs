@@ -120,7 +120,6 @@ namespace ClientCore.ViewModels
 				do
 				{
 					_client = _clientService.GetClient(_Callback, 9001, 9002);
-                    Thread.Sleep(2000);
                     _isStart = _client.Start();
 				} while (!_isStart);
 
