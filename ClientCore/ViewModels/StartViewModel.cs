@@ -89,16 +89,38 @@ namespace ClientCore.ViewModels
 				}
 			);
 
-			#endregion
+            #endregion
 
-			#region Подключение к серверу
+            #region Подключение к серверу
 
-			Task.Run(() =>
+            Task.Run(() =>
+            {
+                
+                do
+                {
+                    StatusMessage = "Подключение к серверу";
+					Thread.Sleep(300);
+					if (_isStart)
+						break;
+                    StatusMessage = "Подключение к серверу.";
+                    Thread.Sleep(300);
+                    if (_isStart)
+                        break;
+                    StatusMessage = "Подключение к серверу..";
+                    Thread.Sleep(300);
+                    if (_isStart)
+                        break;
+                    StatusMessage = "Подключение к серверу...";
+                    Thread.Sleep(400);
+                } while (!_isStart);
+            });
+
+            Task.Run(() =>
 			{
-				StatusMessage = "Подключение к серверу...";
 				do
 				{
 					_client = _clientService.GetClient(_Callback, 9001, 9002);
+                    Thread.Sleep(2000);
                     _isStart = _client.Start();
 				} while (!_isStart);
 
